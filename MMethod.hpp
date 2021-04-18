@@ -56,7 +56,7 @@ protected:
         if (pd.pparamdescex)
         {
             _variant_t var(pd.pparamdescex->varDefaultValue);
-            if ((flg & PARAMFLAG_FHASDEFAULT) && var)
+            if (flg & PARAMFLAG_FHASDEFAULT)
                 attrs.push_back(L"defaultvalue(" + MTypeInfoExtra::QuoteString(var) + L")");
         }
         return attrs;

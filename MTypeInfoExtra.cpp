@@ -73,7 +73,7 @@ MTypeInfoExtra::GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, 
 
 /*static*/ String MTypeInfoExtra::ReEscape(const String& s)
 {
-    String ret = L"\\";
+    String ret = L"\"";
     for (auto ch : s)
     {
         switch (ch)
@@ -105,7 +105,9 @@ MTypeInfoExtra::GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, 
 
 /*static*/ String MTypeInfoExtra::QuoteString(const _variant_t& var)
 {
-    return L""; // ...
+    if (var.vt == VT_BSTR)
+        return MTypeInfoExtra::ReEscape(String(var.operator _bstr_t()));
+    return String(var.operator _bstr_t());
 }
 
 /*static*/ List<String>

@@ -10,10 +10,14 @@
 /*static*/ String MTypeInfoExtra::GetName(MComPtr<ITypeLib> tl)
 {
     BSTR bstr = NULL;
-    DWORD context;
+    DWORD context = 0;
     tl->GetDocumentation(-1, &bstr, NULL, &context, NULL);
-    String ret = bstr;
-    ::SysFreeString(bstr);
+    String ret;
+    if (bstr)
+    {
+        ret = bstr;
+        ::SysFreeString(bstr);
+    }
     return ret;
 }
 
@@ -27,8 +31,12 @@
     BSTR bstr = NULL;
     DWORD context;
     ti->GetDocumentation(memid, &bstr, NULL, &context, NULL);
-    String ret = bstr;
-    ::SysFreeString(bstr);
+    String ret;
+    if (bstr)
+    {
+        ret = bstr;
+        ::SysFreeString(bstr);
+    }
     return ret;
 }
 
@@ -51,8 +59,11 @@ MTypeInfoExtra::GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, 
     String ret;
     BSTR bstr = NULL;
     ti->GetDocumentation(-1, NULL, &bstr, &context, NULL);
-    ret = bstr;
-    ::SysFreeString(bstr);
+    if (bstr)
+    {
+        ret = bstr;
+        ::SysFreeString(bstr);
+    }
     return ret;
 }
 
@@ -105,6 +116,12 @@ MTypeInfoExtra::GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, 
 
 /*static*/ String MTypeInfoExtra::QuoteString(const _variant_t& var)
 {
+    if (var.vt == VT_NULL)
+        return L"NULL";
+    if (var.vt == VT_DISPATCH && !var.pdispVal)
+        return L"NULL";
+    if (var.vt == VT_BOOL)
+        return (var.boolVal ? L"-1" : L"0");
     if (var.vt == VT_BSTR)
         return MTypeInfoExtra::ReEscape(String(var.operator _bstr_t()));
     return String(var.operator _bstr_t());
@@ -119,6 +136,8 @@ MTypeInfoExtra::GetNames(Ptr<MFuncDesc> fd, MComPtr<ITypeInfo> ti)
     List<String> ret;
     for (UINT i = 0; i < cGot; ++i)
     {
+        if (!names[i])
+            break;
         ret.push_back(names[i]);
         ::SysFreeString(names[i]);
     }
@@ -130,11 +149,11 @@ MTypeInfoExtra::GetDllEntry(MComPtr<ITypeInfo> ti, INVOKEKIND invkind, int memid
 {
     BSTR dllentry = NULL;
     ti->GetDllEntry(memid, invkind, &dllentry, 0, 0);
+    String ret;
     if (dllentry)
     {
-        String ret = dllentry;
+        ret = dllentry;
         ::SysFreeString(dllentry);
-        return ret;
     }
-    return L"";
+    return ret;
 }

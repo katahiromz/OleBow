@@ -1,6 +1,7 @@
 #include "OleBow.hpp"
 #include "MTypeLib.hpp"
 #include "MTypeLibAttr.hpp"
+#include <shlwapi.h>
 
 EXTERN_C OLEBOWAPI void APIENTRY DumpTypeLib(MWriter& writer, const wchar_t *path)
 {
@@ -73,5 +74,14 @@ bool GetFileNameOfTypeLib(MComPtr<ITypeLib> dl, GUID& guid, String& name, String
         ::RegCloseKey(hSubKey);
     }
     ::RegCloseKey(hKey);
+
+    if (lstrcmpiW(PathFindExtensionW(path.c_str()), L".tlb") != 0)
+    {
+        auto ich = path.find_last_of(L'\\');
+        if (ich != path.npos)
+        {
+            path = path.substr(0, ich);
+        }
+    }
     return true;
 }

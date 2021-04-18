@@ -53,8 +53,8 @@ void MDispInterface::GetAttrs(StringList& attrs)
     // TYPEFLAG_FCANCREATE is not applicable to interfaces/dispinterfaces
     if ((*m_ta)->wTypeFlags & TYPEFLAG_FCONTROL) attrs.push_back(L"control");
     // No IDL syntax for TYPEFLAG_FDISPATCHABLE -- it is computed
-    if ((*m_ta)->wTypeFlags & TYPEFLAG_FDUAL) attrs.push_back(L"dual");
     if ((*m_ta)->wTypeFlags & TYPEFLAG_FHIDDEN) attrs.push_back(L"hidden");
+    if ((*m_ta)->wTypeFlags & TYPEFLAG_FDUAL) attrs.push_back(L"dual");
     if ((*m_ta)->wTypeFlags & TYPEFLAG_FLICENSED) attrs.push_back(L"licensed");
     if ((*m_ta)->wTypeFlags & TYPEFLAG_FNONEXTENSIBLE) attrs.push_back(L"nonextensible");
     if ((*m_ta)->wTypeFlags & TYPEFLAG_FOLEAUTOMATION) attrs.push_back(L"oleautomation");

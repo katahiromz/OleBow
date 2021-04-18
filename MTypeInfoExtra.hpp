@@ -11,7 +11,7 @@ struct MTypeInfoExtra
     static String GetName(MComPtr<ITypeInfo> ti);
     static String GetDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid);
     static String GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, DWORD& context);
-    static String GetHelpDocumentation(MComPtr<ITypeLib> ti, DWORD& context);
+    static String GetHelpDocumentation(MComPtr<ITypeLib> ti, String& helpfile, DWORD& context);
     static bool SwapForInterface(MComPtr<ITypeInfo>& ti, Ptr<MTypeAttr>& ta);
     static String ReEscape(const String& s);
     static String QuoteString(const _variant_t& var);

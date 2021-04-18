@@ -32,7 +32,8 @@ void MTypeLib::Load(const wchar_t *path)
 
     m_name = MTypeInfoExtra::GetName(m_tlib);
     DWORD ctx = 0;
-    m_name += L" (" + MTypeInfoExtra::GetHelpDocumentation(m_tlib, ctx) + L")";
+    String helpfile;
+    m_name += L" (" + MTypeInfoExtra::GetHelpDocumentation(m_tlib, helpfile, ctx) + L")";
 }
 
 void MTypeLib::Unload()
@@ -76,6 +77,31 @@ void MTypeLib::GetAttrs(StringList& attrs)
         attrs.push_back(str.c_str());
     }
 
+    DWORD cnt = 0;
+    String helpfile;
+    auto help = MTypeInfoExtra::GetHelpDocumentation(m_tlib, helpfile, cnt);
+    if (help.size())
+    {
+        String str = L"helpstring(\"";
+        str += help;
+        str += L"\")";
+        attrs.push_back(str.c_str());
+    }
+    if (helpfile.size())
+    {
+        String str = L"helpfile(\"";
+        str += helpfile;
+        str += L"\")";
+        attrs.push_back(str.c_str());
+    }
+    if (cnt)
+    {
+        String str = L"helpcontext(";
+        str += MTypeInfoExtra::PaddedHex(cnt);
+        str += L")";
+        attrs.push_back(str.c_str());
+    }
+
     MComPtr<ITypeLib2> tlib2;
     m_tlib->QueryInterface(IID_ITypeLib2, reinterpret_cast<LPVOID *>(&tlib2));
     if (tlib2)
@@ -91,23 +117,6 @@ void MTypeLib::GetAttrs(StringList& attrs)
             str += L")";
             attrs.push_back(str);
         }
-    }
-
-    DWORD cnt = 0;
-    auto help = MTypeInfoExtra::GetHelpDocumentation(m_tlib, cnt);
-    if (help.size())
-    {
-        String str = L"helpstring(\"";
-        str += help;
-        str += L"\")";
-        attrs.push_back(str.c_str());
-    }
-    if (cnt)
-    {
-        String str = L"helpcontext(";
-        str += MTypeInfoExtra::PaddedHex(cnt);
-        str += L")";
-        attrs.push_back(str.c_str());
     }
 }
 

@@ -75,7 +75,10 @@ bool GetFileNameOfTypeLib(MComPtr<ITypeLib> dl, GUID& guid, String& name, String
     }
     ::RegCloseKey(hKey);
 
-    if (lstrcmpiW(PathFindExtensionW(path.c_str()), L".tlb") != 0)
+    auto pch = PathFindFileNameW(path.c_str());
+    while (L'0' <= *pch && *pch <= L'9')
+        ++pch;
+    if (*pch == 0)
     {
         auto ich = path.find_last_of(L'\\');
         if (ich != path.npos)

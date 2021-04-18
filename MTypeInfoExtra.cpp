@@ -1,4 +1,5 @@
 #include "MTypeInfoExtra.hpp"
+#include <shlwapi.h>
 
 /*static*/ String MTypeInfoExtra::PaddedHex(DWORD value)
 {
@@ -54,15 +55,20 @@ MTypeInfoExtra::GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, 
     return ret;
 }
 
-/*static*/ String MTypeInfoExtra::GetHelpDocumentation(MComPtr<ITypeLib> ti, DWORD& context)
+/*static*/ String MTypeInfoExtra::GetHelpDocumentation(MComPtr<ITypeLib> ti, String& helpfile, DWORD& context)
 {
     String ret;
-    BSTR bstr = NULL;
-    ti->GetDocumentation(-1, NULL, &bstr, &context, NULL);
+    BSTR bstr = NULL, bstrHelpFile = NULL;
+    ti->GetDocumentation(-1, NULL, &bstr, &context, &bstrHelpFile);
     if (bstr)
     {
         ret = bstr;
         ::SysFreeString(bstr);
+    }
+    if (bstrHelpFile)
+    {
+        helpfile = PathFindFileNameW(bstrHelpFile);
+        ::SysFreeString(bstrHelpFile);
     }
     return ret;
 }

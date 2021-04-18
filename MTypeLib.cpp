@@ -226,13 +226,15 @@ void MTypeLib::Dump(MSmartWriter& writer)
 retry:
         for (size_t i = 0; i < children->size() - 1; ++i)
         {
+            auto& item1 = (*children)[i];
+            auto i1 = std::dynamic_pointer_cast<MInterface>(item1);
+            if (!i1)
+                continue;
             for (size_t j = i + 1; j < children->size(); ++j)
             {
-                auto& item1 = (*children)[i];
                 auto& item2 = (*children)[j];
-                auto i1 = std::dynamic_pointer_cast<MInterface>(item1);
                 auto i2 = std::dynamic_pointer_cast<MInterface>(item2);
-                if (!i1 || !i2)
+                if (!i2)
                     continue;
                 if (i1->BaseName() == i2->ShortName())
                 {

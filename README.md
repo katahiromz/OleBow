@@ -12,7 +12,7 @@ This software is based on [leibnitz27/olewoo](https://github.com/leibnitz27/olew
 olebow32 [options] your_file.tlb [output.idl]
 
 Options:
-  --help      Show this message
-  --version   Show version information
+  --help          Show this message
+  --version       Show version information
   --codepage XXX  Set codepage
 ```

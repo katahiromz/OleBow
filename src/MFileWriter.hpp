@@ -6,14 +6,17 @@
 struct MFileWriter : MWriter
 {
     FILE *m_fp;
+    int m_codepage = 0;
 
-    MFileWriter(const wchar_t *file)
+    MFileWriter(const wchar_t *file, int codepage = 0)
     {
         m_fp = _wfopen(file, L"w");
+        m_codepage = codepage;
     }
-    MFileWriter(FILE *fp)
+    MFileWriter(FILE *fp, int codepage = 0)
     {
         m_fp = fp;
+        m_codepage = codepage;
     }
     ~MFileWriter()
     {
@@ -22,6 +25,15 @@ struct MFileWriter : MWriter
     }
     void Write(const wchar_t *psz) override
     {
-        std::fputws(psz, m_fp);
+        if (m_codepage)
+        {
+            char sz[1024];
+            ::WideCharToMultiByte(m_codepage, 0, psz, -1, sz, _countof(sz), NULL, NULL);
+            std::fputs(sz, m_fp);
+        }
+        else
+        {
+            std::fputws(psz, m_fp);
+        }
     }
 };

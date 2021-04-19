@@ -4,9 +4,9 @@
 static void show_version(void)
 {
 #ifdef _WIN64
-    std::puts("OleBow (64-bit) ver.0.0 by katahiromz");
+    std::puts("OleBow (64-bit) ver.0.5 by katahiromz");
 #else
-    std::puts("OleBow (32-bit) ver.0.0 by katahiromz");
+    std::puts("OleBow (32-bit) ver.0.5 by katahiromz");
 #endif
     std::puts("See: https://github.com/katahiromz/OleBow");
 }
@@ -14,28 +14,30 @@ static void show_version(void)
 static void show_help(void)
 {
 #ifdef _WIN64
-    std::puts("Usage: OleBow your_file.tlb [output.idl]");
+    std::puts("Usage: olebow64 [options] your_file.tlb [output.idl]");
 #else
-    std::puts("Usage: OleBow your_file.tlb [output.idl]");
+    std::puts("Usage: olebow32 [options] your_file.tlb [output.idl]");
 #endif
     std::puts("Options:");
-    std::puts("  --help      Show this message");
-    std::puts("  --version   Show version information");
+    std::puts("  --help          Show this message");
+    std::puts("  --version       Show version information");
+    std::puts("  --codepage XXX  Set codepage");
 }
 
-INT JustDoIt(const wchar_t *input_file, const wchar_t *output_file)
+INT JustDoIt(const wchar_t *input_file, const wchar_t *output_file, int codepage)
 {
     HRESULT hr = ::OleInitialize(NULL);
 
     bool ok = false;
     try
     {
-        MFileWriter writer(output_file);
+        MFileWriter writer(output_file, codepage);
         DumpTypeLib(writer, input_file);
         ok = true;
     }
     catch(...)
     {
+        std::fprintf(stderr, "ERROR: Something is wrong.\n");
     }
 
     if (SUCCEEDED(hr))
@@ -58,34 +60,53 @@ int wmain(int argc, wchar_t **wargv)
         return EXIT_FAILURE;
     }
 
-    String arg = wargv[1];
-    if (arg == L"--help")
+    int codepage = 0;
+    String input_file, output_file;
+    for (int i = 1; i < argc; ++i)
     {
-        show_help();
-        return EXIT_SUCCESS;
-    }
-    if (arg == L"--version")
-    {
-        show_version();
-        return EXIT_SUCCESS;
-    }
-    if (arg[0] == L'-')
-    {
-        std::fprintf(stderr, "ERROR: Invalid argument\n");
-        return EXIT_FAILURE;
+        String arg = wargv[i];
+        if (arg == L"--help")
+        {
+            show_help();
+            return EXIT_SUCCESS;
+        }
+        if (arg == L"--version")
+        {
+            show_version();
+            return EXIT_SUCCESS;
+        }
+        if (arg == L"--codepage")
+        {
+            codepage = _wtoi(wargv[i + 1]);
+            ++i;
+            continue;
+        }
+        if (arg[0] == L'-')
+        {
+            std::fprintf(stderr, "ERROR: Invalid argument\n");
+            return EXIT_FAILURE;
+        }
+        if (input_file.empty())
+        {
+            input_file = arg;
+        }
+        else if (output_file.empty())
+        {
+            output_file = arg;
+        }
+        else
+        {
+            std::fprintf(stderr, "ERROR: Too many arguments\n");
+            return EXIT_FAILURE;
+        }
     }
 
-    String input_file = arg, output_file;
-    if (argc == 3)
-    {
-        output_file = wargv[2];
-    }
-    else
+    if (output_file.empty())
     {
         output_file = input_file + L".idl";
     }
 
-    return JustDoIt(input_file.c_str(), output_file.c_str());
+    return JustDoIt(input_file.c_str(), output_file.c_str(), codepage);
 }
 
 int main(int argc, char **argv)

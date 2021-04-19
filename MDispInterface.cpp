@@ -31,15 +31,12 @@ Ptr<MNodeList> MDispInterface::GenChildren()
 void MDispInterface::GetAttrs(StringList& attrs)
 {
     attrs.push_back(L"uuid(" + GetString((*m_ta)->guid) + L")");
+
     MTypeAttr ta(m_ti);
-    if (ta->wMajorVerNum != 0 || ta->wMinorVerNum != 0)
+    String strVersion;
+    if (MTypeInfoExtra::GetVersion(ta, strVersion))
     {
-        String str = L"version(";
-        str += std::to_wstring(ta->wMajorVerNum);
-        str += L".";
-        str += std::to_wstring(ta->wMinorVerNum);
-        str += L")";
-        attrs.push_back(str);
+        attrs.push_back(strVersion);
     }
 
     MCustData::GetCustData(m_ti, attrs);

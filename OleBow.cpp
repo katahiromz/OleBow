@@ -47,6 +47,7 @@ bool GetFileNameOfTypeLib(MComPtr<ITypeLib> dl, GUID& guid, String& name, String
     WCHAR sz[MAX_PATH];
     std::swprintf(sz, L"TypeLib\\{%ls}\\%u.%u",
         GetString(attr->guid).c_str(), attr->wMajorVerNum, attr->wMinorVerNum);
+
     HKEY hKey = NULL;
     ::RegOpenKeyExW(HKEY_CLASSES_ROOT, sz, 0, KEY_READ, &hKey);
     if (!hKey)

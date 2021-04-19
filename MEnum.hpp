@@ -36,14 +36,10 @@ public:
             attrs.push_back(str.c_str());
         }
 
-        if ((*m_ta)->wMajorVerNum || (*m_ta)->wMinorVerNum)
+        String strVersion;
+        if (MTypeInfoExtra::GetVersion(*m_ta, strVersion))
         {
-            str = L"version(";
-            str += std::to_wstring((*m_ta)->wMajorVerNum);
-            str += L".";
-            str += std::to_wstring((*m_ta)->wMinorVerNum);
-            str += L")";
-            attrs.push_back(str.c_str());
+            attrs.push_back(strVersion);
         }
     }
     Ptr<MNodeList> GenChildren() override

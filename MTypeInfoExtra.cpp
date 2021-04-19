@@ -163,3 +163,17 @@ MTypeInfoExtra::GetDllEntry(MComPtr<ITypeInfo> ti, INVOKEKIND invkind, int memid
     }
     return ret;
 }
+
+/*static*/ bool MTypeInfoExtra::GetVersion(MTypeAttr& ta, String& str)
+{
+    if (ta->wMajorVerNum || ta->wMinorVerNum)
+    {
+        str = L"version(";
+        str += std::to_wstring(ta->wMajorVerNum);
+        str += L".";
+        str += std::to_wstring(ta->wMinorVerNum);
+        str += L")";
+        return true;
+    }
+    return false;
+}

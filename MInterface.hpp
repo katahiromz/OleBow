@@ -49,17 +49,14 @@ public:
         attrs.push_back(str);
 
         MTypeAttr ta(m_ti);
-        if (ta->wMajorVerNum != 0 || ta->wMinorVerNum != 0)
+        String strVersion;
+        if (MTypeInfoExtra::GetVersion(ta, strVersion))
         {
-            str = L"version(";
-            str += std::to_wstring(ta->wMajorVerNum);
-            str += L".";
-            str += std::to_wstring(ta->wMinorVerNum);
-            str += L")";
-            attrs.push_back(str);
+            attrs.push_back(strVersion);
         }
 
         MCustData::GetCustData(m_ti, attrs);
+
         DWORD context = 0;
         auto help = MTypeInfoExtra::GetHelpDocumentationById(m_ti, -1, context);
         AddHelpStringAndContext(attrs, help, context);

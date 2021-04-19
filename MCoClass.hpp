@@ -33,20 +33,19 @@ public:
         str += L")";
         attrs.push_back(str);
 
-        auto ta = MakePtr<MTypeAttr>(m_ti);
-        if ((*ta)->wMajorVerNum != 0 || (*ta)->wMinorVerNum != 0)
+        MTypeAttr ta(m_ti);
+        String strVersion;
+        if (MTypeInfoExtra::GetVersion(ta, strVersion))
         {
-            str = L"version(";
-            str += std::to_wstring((*ta)->wMajorVerNum);
-            str += L".";
-            str += std::to_wstring((*ta)->wMinorVerNum);
-            str += L")";
-            attrs.push_back(str);
+            attrs.push_back(strVersion);
         }
+
         MCustData::GetCustData(m_ti, attrs);
+
         DWORD context = 0;
         auto help = MTypeInfoExtra::GetHelpDocumentationById(m_ti, -1, context);
         AddHelpStringAndContext(attrs, help, context);
+
         if (!((*m_ta)->wTypeFlags & TYPEFLAG_FCANCREATE))
             attrs.push_back(L"noncreatable");
     }

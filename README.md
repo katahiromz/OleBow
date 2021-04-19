@@ -15,4 +15,5 @@ Options:
   --help          Show this message
   --version       Show version information
   --codepage XXX  Set output codepage
+  --sort          Do sort by dependency
 ```

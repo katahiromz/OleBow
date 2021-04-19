@@ -5,8 +5,8 @@
 class MTypeLib : public MNode
 {
 public:
-    MTypeLib();
-    MTypeLib(const wchar_t *path);
+    MTypeLib(bool sort = false);
+    MTypeLib(const wchar_t *path, bool sort = false);
     ~MTypeLib();
     void Load(const wchar_t *path);
     void Unload();
@@ -22,6 +22,7 @@ public:
         return NULL;
     }
 protected:
+    bool m_sort;
     TLIBATTR *m_pAttr;
     String m_name;
     MComPtr<ITypeLib> m_tlib;

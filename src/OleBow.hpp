@@ -39,7 +39,8 @@ typedef Set<String> StringSet;
     #define OLEBOWAPI /*empty*/
 #endif
 
-EXTERN_C OLEBOWAPI void APIENTRY DumpTypeLib(MWriter& writer, const wchar_t *path);
+EXTERN_C OLEBOWAPI void APIENTRY
+DumpTypeLib(MWriter& writer, const wchar_t *path, bool sort);
 
 String GetString(const GUID& guid);
 String GetCallConvString(CALLCONV callconv);

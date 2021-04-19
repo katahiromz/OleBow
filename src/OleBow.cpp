@@ -3,9 +3,10 @@
 #include "MTypeLibAttr.hpp"
 #include <shlwapi.h>
 
-EXTERN_C OLEBOWAPI void APIENTRY DumpTypeLib(MWriter& writer, const wchar_t *path)
+EXTERN_C OLEBOWAPI void APIENTRY
+DumpTypeLib(MWriter& writer, const wchar_t *path, bool sort)
 {
-    auto tlib = MakePtr<MTypeLib>();
+    auto tlib = MakePtr<MTypeLib>(sort);
     tlib->Load(path);
     MSmartWriter smart_writer(writer);
     tlib->Dump(smart_writer);

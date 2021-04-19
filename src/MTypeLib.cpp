@@ -10,11 +10,12 @@
 #include <shlwapi.h>
 #include <algorithm>
 
-MTypeLib::MTypeLib() : m_pAttr(NULL)
+MTypeLib::MTypeLib(bool sort) : m_sort(sort), m_pAttr(NULL)
 {
 }
 
-MTypeLib::MTypeLib(const wchar_t *path) : m_pAttr(NULL)
+MTypeLib::MTypeLib(const wchar_t *path, bool sort)
+    : m_sort(sort), m_pAttr(NULL)
 {
     Load(path);
 }
@@ -174,29 +175,32 @@ void MTypeLib::Dump(MSmartWriter& writer)
         writer.write_empty_line();
 
         auto children = Children();
-        std::sort(children->begin(), children->end(),
-            [](const Ptr<MNode>& i1, const Ptr<MNode>& i2) {
-                if (i1->Depending()->empty() && !i2->Depending()->empty())
-                    return true;
-                if (!i1->Depending()->empty() && i2->Depending()->empty())
-                    return false;
-                for (auto& item : *i1->Providing())
-                {
-                    if (i2->Depending()->count(item) > 0)
+        if (m_sort)
+        {
+            std::sort(children->begin(), children->end(),
+                [](const Ptr<MNode>& i1, const Ptr<MNode>& i2) {
+                    if (i1->Depending()->empty() && !i2->Depending()->empty())
                         return true;
-                }
-                for (auto& item : *i2->Providing())
-                {
-                    if (i1->Depending()->count(item) > 0)
+                    if (!i1->Depending()->empty() && i2->Depending()->empty())
                         return false;
-                }
-                if (i1->ShortName() < i2->ShortName())
-                    return true;
-                if (i1->ShortName() < i2->ShortName())
+                    for (auto& item : *i1->Providing())
+                    {
+                        if (i2->Depending()->count(item) > 0)
+                            return true;
+                    }
+                    for (auto& item : *i2->Providing())
+                    {
+                        if (i1->Depending()->count(item) > 0)
+                            return false;
+                    }
+                    if (i1->ShortName() < i2->ShortName())
+                        return true;
+                    if (i1->ShortName() < i2->ShortName())
+                        return false;
                     return false;
-                return false;
-            }
-        );
+                }
+            );
+        }
 
         Set<String> ifaces;
         for (auto& child : *children)

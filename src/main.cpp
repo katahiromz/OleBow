@@ -3,7 +3,7 @@
 
 static void show_version(void)
 {
-    std::puts("OleBow ver.0.6 by katahiromz");
+    std::puts("OleBow ver.0.7 by katahiromz");
     std::puts("See: https://github.com/katahiromz/OleBow");
 }
 
@@ -45,12 +45,6 @@ int wmain(int argc, wchar_t **wargv)
         show_help();
         return EXIT_SUCCESS;
     }
-    if (argc > 3)
-    {
-        fprintf(stderr, "ERROR: Too many arguments\n");
-        show_help();
-        return EXIT_FAILURE;
-    }
 
     int codepage = 0;
     String input_file, output_file;
@@ -69,8 +63,8 @@ int wmain(int argc, wchar_t **wargv)
         }
         if (arg == L"--codepage")
         {
-            codepage = _wtoi(wargv[i + 1]);
             ++i;
+            codepage = _wtoi(wargv[i]);
             continue;
         }
         if (arg[0] == L'-')

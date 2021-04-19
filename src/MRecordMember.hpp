@@ -8,7 +8,9 @@ public:
     {
         m_parent = parent;
         m_name = MTypeInfoExtra::GetDocumentationById(ti, (*vd)->memid);
-        m_type = reinterpret_cast<MTypeDesc&>((*vd)->elemdescVar.tdesc).ComTypeNameAsString(ti);
+        m_vd = vd;
+        m_ti = ti;
+        m_type = reinterpret_cast<MTypeDesc&>((*m_vd)->elemdescVar.tdesc).ComTypeNameAsString(m_ti);
     }
     String Name() override
     {
@@ -37,7 +39,21 @@ public:
     {
         return false;
     }
+    Ptr<StringSet> GenDepending() override
+    {
+        auto ret = MakePtr<StringSet>();
+        reinterpret_cast<MTypeDesc&>((*m_vd)->elemdescVar.tdesc).GenDepending(m_ti, *ret);
+        return ret;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        auto ret = MakePtr<StringSet>();
+        ret->insert(m_name);
+        return ret;
+    }
 protected:
     String m_type;
     String m_name;
+    MComPtr<ITypeInfo> m_ti;
+    Ptr<MVarDesc> m_vd;
 };

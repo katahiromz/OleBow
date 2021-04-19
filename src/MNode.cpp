@@ -20,6 +20,24 @@ Ptr<MNodeList> MNode::Children()
     return m_children;
 }
 
+Ptr<StringSet> MNode::Depending()
+{
+    if (!m_depending)
+    {
+        m_depending = GenDepending();
+    }
+    return m_depending;
+}
+
+Ptr<StringSet> MNode::Providing()
+{
+    if (!m_providing)
+    {
+        m_providing = GenProviding();
+    }
+    return m_providing;
+}
+
 void
 MNode::CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
                            bool topLevel, bool swapfordispatch,

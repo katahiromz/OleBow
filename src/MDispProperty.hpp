@@ -53,6 +53,19 @@ public:
     {
         return false;
     }
+    Ptr<StringSet> GenDepending() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto& ed = m_vd->elemDescVar();
+        ed.TypeDesc().GenDepending(m_ti, *ret);
+        return ret;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        auto ret = MakePtr<StringSet>();
+        ret->insert(m_name);
+        return ret;
+    }
 protected:
     String m_name;
     Ptr<MVarDesc> m_vd;

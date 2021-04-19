@@ -3,7 +3,7 @@
 
 static void show_version(void)
 {
-    std::puts("OleBow ver.0.7 by katahiromz");
+    std::puts("OleBow ver.0.7.1 by katahiromz");
     std::puts("See: https://github.com/katahiromz/OleBow");
 }
 
@@ -29,7 +29,7 @@ INT JustDoIt(const wchar_t *input_file, const wchar_t *output_file, int codepage
     }
     catch(...)
     {
-        std::fprintf(stderr, "ERROR: Something is wrong.\n");
+        std::fprintf(stderr, "error: Something is wrong.\n");
     }
 
     if (SUCCEEDED(hr))
@@ -69,7 +69,7 @@ int wmain(int argc, wchar_t **wargv)
         }
         if (arg[0] == L'-')
         {
-            std::fprintf(stderr, "ERROR: Invalid argument\n");
+            std::fprintf(stderr, "error: Invalid argument\n");
             return EXIT_FAILURE;
         }
         if (input_file.empty())
@@ -82,7 +82,7 @@ int wmain(int argc, wchar_t **wargv)
         }
         else
         {
-            std::fprintf(stderr, "ERROR: Too many arguments\n");
+            std::fprintf(stderr, "error: Too many arguments\n");
             return EXIT_FAILURE;
         }
     }

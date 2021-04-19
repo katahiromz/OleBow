@@ -22,6 +22,7 @@
 #define Set std::set
 typedef std::wstring String;
 typedef List<String> StringList;
+typedef Set<String> StringSet;
 
 #include "MComPtr.hpp"
 #include "MSmartWriter.hpp"

@@ -90,3 +90,45 @@ String MTypeDesc::ComTypeNameAsString(MComPtr<ITypeInfo> ti)
 {
     return stringifyTypeDesc(this, ti);
 }
+
+void MTypeDesc::GenDepending(MComPtr<ITypeInfo> ti, StringSet& depending)
+{
+    GenDepending(this, ti, depending);
+}
+
+void MTypeDesc::GenDepending(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSet& depending)
+{
+    String ret;
+    switch (typeDesc->vt)
+    {
+    case VT_PTR:
+    case VT_SAFEARRAY:
+        GenDepending(typeDesc->lptdesc, ti, depending);
+        break;
+    case VT_CARRAY:
+        GenDepending(&typeDesc->lpadesc->tdescElem, ti, depending);
+        break;
+    case VT_USERDEFINED:
+        GenDepending(ti, typeDesc->hreftype, depending);
+    default:
+        break;
+    }
+}
+
+/*static*/ void MTypeDesc::GenDepending(MComPtr<ITypeInfo> pti, HREFTYPE refType, StringSet& depending)
+{
+    MComPtr<ITypeInfo> pTypeInfo(pti);
+    MComPtr<ITypeInfo> pCustTypeInfo;
+    HRESULT hr = pTypeInfo->GetRefTypeInfo(refType, &pCustTypeInfo);
+    if (hr)
+        return;
+
+    BSTR bstrType;
+    hr = pCustTypeInfo->GetDocumentation(-1, &bstrType, NULL, NULL, NULL);
+    if (hr)
+        return;
+
+    String str = bstrType;
+    ::SysFreeString(bstrType);
+    depending.insert(str);
+}

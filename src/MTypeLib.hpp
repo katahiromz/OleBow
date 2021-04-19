@@ -8,11 +8,19 @@ public:
     MTypeLib();
     MTypeLib(const wchar_t *path);
     ~MTypeLib();
-
     void Load(const wchar_t *path);
     void Unload();
     void Dump(MSmartWriter& writer) override;
-
+    Ptr<StringSet> GenDepending() override
+    {
+        assert(0);
+        return NULL;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        assert(0);
+        return NULL;
+    }
 protected:
     TLIBATTR *m_pAttr;
     String m_name;
@@ -28,6 +36,5 @@ protected:
         assert(0);
         return true;
     }
-
     void DumpMetadata(MSmartWriter& writer);
 };

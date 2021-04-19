@@ -39,6 +39,16 @@ public:
     {
         return false;
     }
+    Ptr<StringSet> GenDepending() override
+    {
+        return MakePtr<StringSet>();
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        auto ret = MakePtr<StringSet>();
+        ret->insert(m_name);
+        return ret;
+    }
 protected:
     int m_idx;
     String m_name;

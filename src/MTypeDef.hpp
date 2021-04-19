@@ -13,27 +13,25 @@ public:
         m_ta = ta;
         m_ti = ti;
 
-        String prefix;
         if ((*m_ta)->tdescAlias.vt & VT_ARRAY)
         {
             auto oad = (*m_ta)->tdescAlias.lpadesc;
             m_ti->GetRefTypeInfo(oad->tdescElem.hreftype, &m_oti);
-            prefix = MTypeInfoExtra::GetName(m_oti) + L" ";
+            m_type = MTypeInfoExtra::GetName(m_oti) + L" ";
         }
         else
         {
-            prefix = reinterpret_cast<MTypeDesc&>((*m_ta)->tdescAlias).ComTypeNameAsString(m_ti);
-            prefix += L" ";
+            m_type = reinterpret_cast<MTypeDesc&>((*m_ta)->tdescAlias).ComTypeNameAsString(m_ti);
             if ((*m_ta)->tdescAlias.vt == VT_USERDEFINED)
             {
                 m_ti->GetRefTypeInfo((*m_ta)->tdescAlias.hreftype, &m_oti);
             }
         }
-        m_name = prefix + MTypeInfoExtra::GetName(ti);
+        m_name = MTypeInfoExtra::GetName(ti);
     }
     String Name() override
     {
-        return L"typedef " + m_name;
+        return L"typedef " + m_type + L" " + m_name;
     }
     String ShortName() override
     {
@@ -63,22 +61,35 @@ public:
 
         if (attrs.empty())
         {
-            writer.write_line(L"typedef " + ShortName() + L";");
+            writer.write_line(L"typedef " + m_type + L" " + ShortName() + L";");
         }
         else
         {
             writer.write_line(L"typedef ");
             writer.write_attrs(attrs);
-            writer.write_line(ShortName() + L";");
+            writer.write_line(L" " + m_type + L" " + ShortName() + L";");
         }
     }
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override
     {
         return true;
     }
+    Ptr<StringSet> GenDepending() override
+    {
+        auto ret = MakePtr<StringSet>();
+        reinterpret_cast<MTypeDesc&>((*m_ta)->tdescAlias).GenDepending(m_ti, *ret);
+        return ret;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        auto ret = MakePtr<StringSet>();
+        ret->insert(m_name);
+        return ret;
+    }
 protected:
     MComPtr<ITypeInfo> m_ti;
     MComPtr<ITypeInfo> m_oti;
     Ptr<MTypeAttr> m_ta;
     String m_name;
+    String m_type;
 };

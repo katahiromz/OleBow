@@ -19,4 +19,19 @@ public:
         ret->push_back(MakePtr<MInterface>(this, ti, ta, false));
         return ret;
     }
+    Ptr<StringSet> GenDepending() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto children = Children();
+        for (auto& child : *children)
+        {
+            auto ret2 = child->Depending();
+            ret->insert(ret2->begin(), ret2->end());
+        }
+        return ret;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        return MakePtr<StringSet>();
+    }
 };

@@ -31,8 +31,8 @@ public:
     void Dump(MSmartWriter& writer) override
     {
         writer.write_line(L"methods:");
-        auto children = Children();
         writer.indent();
+        auto children = Children();
         for (auto& child : *children)
         {
             std::static_pointer_cast<MMethod>(child)->Dump(writer, true);
@@ -42,6 +42,21 @@ public:
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override
     {
         return false;
+    }
+    Ptr<StringSet> GenDepending() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto children = Children();
+        for (auto& child : *children)
+        {
+            auto ret2 = child->Depending();
+            ret->insert(ret2->begin(), ret2->end());
+        }
+        return ret;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        return MakePtr<StringSet>();
     }
 protected:
     MDispInterface* m_di;

@@ -8,6 +8,7 @@
 #include "MCoClass.hpp"
 #include "MEnum.hpp"
 #include <shlwapi.h>
+#include <algorithm>
 
 MTypeLib::MTypeLib() : m_pAttr(NULL)
 {
@@ -172,8 +173,32 @@ void MTypeLib::Dump(MSmartWriter& writer)
         DumpMetadata(writer);
         writer.write_empty_line();
 
-        Set<String> ifaces;
         auto children = Children();
+        std::sort(children->begin(), children->end(),
+            [](const Ptr<MNode>& i1, const Ptr<MNode>& i2) {
+                if (i1->Depending()->empty() && !i2->Depending()->empty())
+                    return true;
+                if (!i1->Depending()->empty() && i2->Depending()->empty())
+                    return false;
+                for (auto& item : *i1->Providing())
+                {
+                    if (i2->Depending()->count(item) > 0)
+                        return true;
+                }
+                for (auto& item : *i2->Providing())
+                {
+                    if (i1->Depending()->count(item) > 0)
+                        return false;
+                }
+                if (i1->ShortName() < i2->ShortName())
+                    return true;
+                if (i1->ShortName() < i2->ShortName())
+                    return false;
+                return false;
+            }
+        );
+
+        Set<String> ifaces;
         for (auto& child : *children)
         {
             if (std::dynamic_pointer_cast<MInterface>(child))
@@ -226,27 +251,6 @@ void MTypeLib::Dump(MSmartWriter& writer)
                 if (!writer.block_first_line())
                     writer.write_empty_line();
                 child->Dump(writer);
-            }
-        }
-
-retry:
-        for (size_t i = 0; i < children->size() - 1; ++i)
-        {
-            auto& item1 = (*children)[i];
-            auto i1 = std::dynamic_pointer_cast<MInterface>(item1);
-            if (!i1)
-                continue;
-            for (size_t j = i + 1; j < children->size(); ++j)
-            {
-                auto& item2 = (*children)[j];
-                auto i2 = std::dynamic_pointer_cast<MInterface>(item2);
-                if (!i2)
-                    continue;
-                if (i1->BaseName() == i2->ShortName())
-                {
-                    std::swap(item1, item2);
-                    goto retry;
-                }
             }
         }
 

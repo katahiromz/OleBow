@@ -53,6 +53,23 @@ public:
     {
         return ifaces.count(ShortName()) == 0;
     }
+    Ptr<StringSet> GenDepending() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto children = Children();
+        for (auto& child : *children)
+        {
+            auto ret2 = child->Depending();
+            ret->insert(ret2->begin(), ret2->end());
+        }
+        return ret;
+    }
+    Ptr<StringSet> GenProviding() override
+    {
+        auto ret = MakePtr<StringSet>();
+        ret->insert(m_name);
+        return ret;
+    }
 protected:
     String m_name;
     Ptr<MTypeAttr> m_ta;

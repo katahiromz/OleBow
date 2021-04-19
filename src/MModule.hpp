@@ -44,7 +44,7 @@ public:
         }
         else
         {
-            attrs.push_back(L"dllname(<no entry points>)");
+            attrs.push_back(L"dllname(\"<no entry points>\")");
         }
 
         if (std::memcmp(&(*m_ta)->guid, &GUID_NULL, sizeof(GUID_NULL)) != 0)

@@ -40,15 +40,23 @@ public:
     {
         StringList attrs;
         GetAttrs(attrs);
-        writer.write_attrs(attrs);
+
+        String strAttrs;
+        if (attrs.size())
+        {
+            strAttrs += L"[";
+            strAttrs += mstr_join(attrs, L", ");
+            strAttrs += L"] ";
+        }
+
         MTypeAttr ta(m_ti);
         if (!(ta->wTypeFlags & TYPEFLAG_FDUAL) && (ta->typekind & TKIND_DISPATCH))
         {
-            writer.write_line(L"dispinterface " + ShortName() + L";");
+            writer.write_line(strAttrs + L"dispinterface " + ShortName() + L";");
         }
         else
         {
-            writer.write_line(L"interface " + ShortName() + L";");
+            writer.write_line(strAttrs + L"interface " + ShortName() + L";");
         }
     }
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override

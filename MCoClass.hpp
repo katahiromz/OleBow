@@ -72,8 +72,6 @@ public:
         writer.indent();
         for (UINT i = 0; i < (*m_ta)->cImplTypes; ++i)
         {
-            if (!writer.block_first_line())
-                writer.write_empty_line();
             HREFTYPE href;
             m_ti->GetRefTypeOfImplType(i, &href);
             MComPtr<ITypeInfo> ti2;

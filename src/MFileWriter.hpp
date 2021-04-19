@@ -10,7 +10,7 @@ struct MFileWriter : MWriter
 
     MFileWriter(const wchar_t *file, int codepage = 0)
     {
-        m_fp = _wfopen(file, L"w");
+        _wfopen_s(&m_fp, file, L"w");
         m_codepage = codepage;
     }
     MFileWriter(FILE *fp, int codepage = 0)

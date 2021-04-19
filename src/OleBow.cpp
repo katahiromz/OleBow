@@ -45,7 +45,7 @@ bool GetFileNameOfTypeLib(MComPtr<ITypeLib> dl, GUID& guid, String& name, String
     guid = attr->guid;
 
     WCHAR sz[MAX_PATH];
-    std::swprintf(sz, L"TypeLib\\{%ls}\\%u.%u",
+    std::swprintf(sz, _countof(sz), L"TypeLib\\{%ls}\\%u.%u",
         GetString(attr->guid).c_str(), attr->wMajorVerNum, attr->wMinorVerNum);
 
     HKEY hKey = NULL;
@@ -59,11 +59,11 @@ bool GetFileNameOfTypeLib(MComPtr<ITypeLib> dl, GUID& guid, String& name, String
     name = sz;
 
     HKEY hSubKey = NULL;
-    std::swprintf(sz, L"%u\\win32", attr->lcid);
+    std::swprintf(sz, _countof(sz), L"%u\\win32", attr->lcid);
     ::RegOpenKeyExW(hKey, sz, 0, KEY_READ, &hSubKey);
     if (!hSubKey)
     {
-        std::swprintf(sz, L"%u\\win64", attr->lcid);
+        std::swprintf(sz, _countof(sz), L"%u\\win64", attr->lcid);
         ::RegOpenKeyExW(hKey, sz, 0, KEY_READ, &hSubKey);
     }
     if (hSubKey)

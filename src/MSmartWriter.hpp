@@ -69,16 +69,6 @@ public:
         m_block_first_line = false;
     }
 
-    void format(const wchar_t *fmt, ...)
-    {
-        va_list va;
-        WCHAR szText[512];
-        va_start(va, fmt);
-        _vsnwprintf(szText, _countof(szText), fmt, va);
-        write_line(szText);
-        va_end(va);
-    }
-
     void write_lines(const string_list_t& lines, bool add_comma = false)
     {
         for (size_t i = 0; i < lines.size(); ++i)

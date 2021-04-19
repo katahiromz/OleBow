@@ -4,7 +4,7 @@
 /*static*/ String MTypeInfoExtra::PaddedHex(DWORD value)
 {
     wchar_t sz[16];
-    std::swprintf(sz, L"0x%08X", value);
+    std::swprintf(sz, _countof(sz), L"0x%08X", value);
     return sz;
 }
 
@@ -107,7 +107,7 @@ MTypeInfoExtra::GetHelpDocumentationById(MComPtr<ITypeInfo> ti, MEMBERID memid, 
             if (ch < 0x20)
             {
                 wchar_t sz[8];
-                std::swprintf(sz, L"\\%03o", ch);
+                std::swprintf(sz, _countof(sz), L"\\%03o", ch);
                 ret += sz;
             }
             else

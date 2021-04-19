@@ -3,21 +3,13 @@
 
 static void show_version(void)
 {
-#ifdef _WIN64
-    std::puts("OleBow (64-bit) ver.0.5 by katahiromz");
-#else
-    std::puts("OleBow (32-bit) ver.0.5 by katahiromz");
-#endif
+    std::puts("OleBow ver.0.6 by katahiromz");
     std::puts("See: https://github.com/katahiromz/OleBow");
 }
 
 static void show_help(void)
 {
-#ifdef _WIN64
-    std::puts("Usage: olebow64 [options] your_file.tlb [output.idl]");
-#else
-    std::puts("Usage: olebow32 [options] your_file.tlb [output.idl]");
-#endif
+    std::puts("Usage: olebow [options] your_file.tlb [output.idl]");
     std::puts("Options:");
     std::puts("  --help          Show this message");
     std::puts("  --version       Show version information");

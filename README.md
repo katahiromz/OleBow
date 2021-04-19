@@ -9,7 +9,7 @@ This software is based on [leibnitz27/olewoo](https://github.com/leibnitz27/olew
 ## Usage
 
 ```txt
-olebow32 [options] your_file.tlb [output.idl]
+Usage: olebow [options] your_file.tlb [output.idl]
 
 Options:
   --help          Show this message

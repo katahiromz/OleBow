@@ -29,13 +29,3 @@ else() # Don't use DLL
     target_link_libraries(olebow_exe PRIVATE olebow_static ole32 oleaut32 shlwapi)
     set_target_properties(olebow_exe PROPERTIES OUTPUT_NAME "olebow")
 endif()
-
-if(CMAKE_SIZEOF_VOID_P MATCHES "8") # sizeof(void*) == 8
-  set_target_properties(olebow PROPERTIES OUTPUT_NAME "olebow64")
-  set_target_properties(olebow_static PROPERTIES OUTPUT_NAME "olebow64_static")
-  set_target_properties(olebow_exe PROPERTIES OUTPUT_NAME "olebow64")
-else()
-  set_target_properties(olebow PROPERTIES OUTPUT_NAME "olebow32")
-  set_target_properties(olebow_static PROPERTIES OUTPUT_NAME "olebow32_static")
-  set_target_properties(olebow_exe PROPERTIES OUTPUT_NAME "olebow32")
-endif()

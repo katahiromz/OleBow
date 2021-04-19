@@ -1,7 +1,6 @@
 #include "MMethod.hpp"
 #include "MCustData.hpp"
 #include "MElemDesc.hpp"
-#include <functional> // for std::function
 
 void MMethod::GetAttrs(StringList& attrs)
 {

@@ -57,20 +57,7 @@ public:
 
         DWORD cnt = 0;
         auto help = MTypeInfoExtra::GetHelpDocumentationById(m_ti, -1, cnt);
-        if (help.size())
-        {
-            String str = L"helpstring(";
-            str += help;
-            str += L")";
-            attrs.push_back(str);
-        }
-        if (cnt)
-        {
-            String str = L"helpcontext(";
-            str += MTypeInfoExtra::PaddedHex(cnt);
-            str += L")";
-            attrs.push_back(str);
-        }
+        AddHelpStringAndContext(attrs, help, cnt);
     }
     Ptr<MNodeList> GenChildren() override;
     Ptr<MNodeList> GenConstChildren();

@@ -21,7 +21,7 @@ static void show_help(void)
     std::puts("Options:");
     std::puts("  --help          Show this message");
     std::puts("  --version       Show version information");
-    std::puts("  --codepage XXX  Set codepage");
+    std::puts("  --codepage XXX  Set output codepage");
 }
 
 INT JustDoIt(const wchar_t *input_file, const wchar_t *output_file, int codepage)

@@ -62,17 +62,10 @@ void MTypeLib::GetAttrs(StringList& attrs)
 {
     if (m_pAttr)
     {
-        String str;
-        if (std::memcmp(&m_pAttr->guid, &GUID_NULL, sizeof(GUID)) != 0)
-        {
-            str = L"uuid(";
-            str += GetString(m_pAttr->guid);
-            str += L")";
-            attrs.push_back(str.c_str());
-        }
+        AddUUID(attrs, m_pAttr->guid);
         if (m_pAttr->wMajorVerNum || m_pAttr->wMinorVerNum)
         {
-            str = L"version(";
+            String str = L"version(";
             str += std::to_wstring(m_pAttr->wMajorVerNum);
             str += L".";
             str += std::to_wstring(m_pAttr->wMinorVerNum);

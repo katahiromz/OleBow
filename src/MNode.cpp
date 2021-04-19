@@ -65,3 +65,11 @@ void MNode::AddHelpStringAndContext(StringList& attrs, String help, DWORD contex
     if (context)
         attrs.push_back(L"helpcontext(" + MTypeInfoExtra::PaddedHex(context) + L")");
 }
+
+void MNode::AddUUID(StringList& attrs, const GUID& guid)
+{
+    if (std::memcmp(&guid, &GUID_NULL, sizeof(GUID_NULL)) != 0)
+    {
+        attrs.push_back(L"uuid(" + GetString(guid) + L")");
+    }
+}

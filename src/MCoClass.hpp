@@ -28,10 +28,7 @@ public:
     }
     void GetAttrs(StringList& attrs) override
     {
-        String str = L"uuid(";
-        str += GetString((*m_ta)->guid);
-        str += L")";
-        attrs.push_back(str);
+        AddUUID(attrs, (*m_ta)->guid);
 
         MTypeAttr ta(m_ti);
         String strVersion;

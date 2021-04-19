@@ -30,7 +30,7 @@ Ptr<MNodeList> MDispInterface::GenChildren()
 }
 void MDispInterface::GetAttrs(StringList& attrs)
 {
-    attrs.push_back(L"uuid(" + GetString((*m_ta)->guid) + L")");
+    AddUUID(attrs, (*m_ta)->guid);
 
     MTypeAttr ta(m_ti);
     String strVersion;

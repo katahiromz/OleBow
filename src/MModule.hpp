@@ -47,13 +47,7 @@ public:
             attrs.push_back(L"dllname(\"<no entry points>\")");
         }
 
-        if (std::memcmp(&(*m_ta)->guid, &GUID_NULL, sizeof(GUID_NULL)) != 0)
-        {
-            String str = L"uuid(";
-            str += GetString((*m_ta)->guid);
-            str += L")";
-            attrs.push_back(str);
-        }
+        AddUUID(attrs, (*m_ta)->guid);
 
         DWORD cnt = 0;
         auto help = MTypeInfoExtra::GetHelpDocumentationById(m_ti, -1, cnt);

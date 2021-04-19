@@ -33,4 +33,5 @@ public:
                              bool topLevel, bool swapfordispatch,
                              MNodeList& res);
     void AddHelpStringAndContext(StringList& attrs, String help, DWORD context);
+    void AddUUID(StringList& attrs, const GUID& guid);
 };

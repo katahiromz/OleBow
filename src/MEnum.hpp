@@ -28,13 +28,7 @@ public:
     {
         String str;
 
-        if (std::memcmp(&(*m_ta)->guid, &GUID_NULL, sizeof(GUID)) != 0)
-        {
-            str = L"uuid(";
-            str += GetString((*m_ta)->guid);
-            str += L")";
-            attrs.push_back(str.c_str());
-        }
+        AddUUID(attrs, (*m_ta)->guid);
 
         String strVersion;
         if (MTypeInfoExtra::GetVersion(*m_ta, strVersion))

@@ -2,6 +2,7 @@
 
 #include "OleBow.hpp"
 #include "MTypeInfoExtra.hpp"
+#include "MTypeAttr.hpp"
 
 class MNode;
 typedef List<Ptr<MNode> > MNodeList;
@@ -34,4 +35,5 @@ public:
                              MNodeList& res);
     void AddHelpStringAndContext(StringList& attrs, String help, DWORD context);
     void AddUUID(StringList& attrs, const GUID& guid);
+    void AddVersion(StringList& attrs, MTypeAttr& ta);
 };

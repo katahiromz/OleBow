@@ -30,11 +30,7 @@ public:
 
         AddUUID(attrs, (*m_ta)->guid);
 
-        String strVersion;
-        if (MTypeInfoExtra::GetVersion(*m_ta, strVersion))
-        {
-            attrs.push_back(strVersion);
-        }
+        AddVersion(attrs, *m_ta);
     }
     Ptr<MNodeList> GenChildren() override
     {

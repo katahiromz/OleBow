@@ -33,11 +33,7 @@ void MDispInterface::GetAttrs(StringList& attrs)
     AddUUID(attrs, (*m_ta)->guid);
 
     MTypeAttr ta(m_ti);
-    String strVersion;
-    if (MTypeInfoExtra::GetVersion(ta, strVersion))
-    {
-        attrs.push_back(strVersion);
-    }
+    AddVersion(attrs, ta);
 
     MCustData::GetCustData(m_ti, attrs);
 

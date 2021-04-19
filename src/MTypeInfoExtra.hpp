@@ -18,5 +18,4 @@ struct MTypeInfoExtra
     static String VarTypeToString(VARTYPE vt);
     static List<String> GetNames(Ptr<MFuncDesc> fd, MComPtr<ITypeInfo> ti);
     static String GetDllEntry(MComPtr<ITypeInfo> ti, INVOKEKIND invkind, int memid);
-    static bool GetVersion(MTypeAttr& ta, String& str);
 };

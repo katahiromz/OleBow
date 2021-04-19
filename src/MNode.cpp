@@ -73,3 +73,16 @@ void MNode::AddUUID(StringList& attrs, const GUID& guid)
         attrs.push_back(L"uuid(" + GetString(guid) + L")");
     }
 }
+
+void MNode::AddVersion(StringList& attrs, MTypeAttr& ta)
+{
+    if (ta->wMajorVerNum || ta->wMinorVerNum)
+    {
+        String str = L"version(";
+        str += std::to_wstring(ta->wMajorVerNum);
+        str += L".";
+        str += std::to_wstring(ta->wMinorVerNum);
+        str += L")";
+        attrs.push_back(str);
+    }
+}

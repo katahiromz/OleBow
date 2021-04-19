@@ -5,25 +5,25 @@
 
 void MMethod::GetAttrs(StringList& attrs)
 {
-    {
-        String str = L"id(";
-        str += MTypeInfoExtra::PaddedHex((*m_fd)->memid);
-        str += L")";
-        attrs.push_back(str);
-    }
+    String str = L"id(";
+    str += MTypeInfoExtra::PaddedHex((*m_fd)->memid);
+    str += L")";
+    attrs.push_back(str);
+
     switch ((*m_fd)->invkind)
     {
     case INVOKE_PROPERTYGET: attrs.push_back(L"propget"); break;
     case INVOKE_PROPERTYPUT: attrs.push_back(L"propput"); break;
     case INVOKE_PROPERTYPUTREF: attrs.push_back(L"propputref"); break;
     }
-    {
-        MCustData::GetAllFuncCustData((*m_fd)->memid, (*m_fd)->invkind, m_ti, attrs);
-    }
-    DWORD context = 0;
-    auto help = MTypeInfoExtra::GetHelpDocumentationById(m_ti, (*m_fd)->memid, context);
+
+    MCustData::GetAllFuncCustData((*m_fd)->memid, (*m_fd)->invkind, m_ti, attrs);
+
     if ((*m_fd)->wFuncFlags & FUNCFLAG_FRESTRICTED) attrs.push_back(L"restricted");
     if ((*m_fd)->wFuncFlags & FUNCFLAG_FHIDDEN) attrs.push_back(L"hidden");
+
+    DWORD context = 0;
+    auto help = MTypeInfoExtra::GetHelpDocumentationById(m_ti, (*m_fd)->memid, context);
     AddHelpStringAndContext(attrs, help, context);
 }
 void MMethod::Dump(MSmartWriter& writer, bool bAsDispatch)

@@ -47,6 +47,18 @@ MNode::CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
     auto ta = MakePtr<MTypeAttr>(ti);
     switch ((*ta)->typekind)
     {
+    case TKIND_ENUM:
+        res.push_back(MakePtr<MEnum>(this, ti, ta));
+        break;
+    case TKIND_RECORD:
+        res.push_back(MakePtr<MRecord>(this, ti, ta));
+        break;
+    case TKIND_MODULE:
+        res.push_back(MakePtr<MModule>(this, ti, ta));
+        break;
+    case TKIND_INTERFACE:
+        res.push_back(MakePtr<MInterface>(this, ti, ta, topLevel));
+        break;
     case TKIND_DISPATCH:
         res.push_back(MakePtr<MDispInterface>(this, ti, ta, topLevel));
         if (swapfordispatch && MTypeInfoExtra::SwapForInterface(ti, ta))
@@ -54,23 +66,11 @@ MNode::CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
             res.push_back(MakePtr<MInterface>(this, ti, ta, topLevel));
         }
         break;
-    case TKIND_INTERFACE:
-        res.push_back(MakePtr<MInterface>(this, ti, ta, topLevel));
-        break;
-    case TKIND_ALIAS:
-        res.push_back(MakePtr<MTypeDef>(this, ti, ta));
-        break;
-    case TKIND_ENUM:
-        res.push_back(MakePtr<MEnum>(this, ti, ta));
-        break;
     case TKIND_COCLASS:
         res.push_back(MakePtr<MCoClass>(this, ti, ta));
         break;
-    case TKIND_RECORD:
-        res.push_back(MakePtr<MRecord>(this, ti, ta));
-        break;
-    case TKIND_MODULE:
-        res.push_back(MakePtr<MModule>(this, ti, ta));
+    case TKIND_ALIAS:
+        res.push_back(MakePtr<MTypeDef>(this, ti, ta));
         break;
     case TKIND_UNION:
         res.push_back(MakePtr<MUnion>(this, ti, ta));

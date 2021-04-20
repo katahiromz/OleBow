@@ -20,6 +20,7 @@ struct MCustData
             str += GetString(item->guid);
             str += L", ";
             str += MTypeInfoExtra::QuoteString(item->varValue);
+            str += L")";
             attrs.push_back(str);
         }
         ::ClearCustData(&custdata);
@@ -46,6 +47,7 @@ struct MCustData
             str += GetString(item->guid);
             str += L", ";
             str += MTypeInfoExtra::QuoteString(item->varValue);
+            str += L")";
             attrs.push_back(str);
         }
         ::ClearCustData(&custdata);

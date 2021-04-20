@@ -3,6 +3,7 @@
 #include "MDispInterface.hpp"
 #include "MEnum.hpp"
 #include "MRecord.hpp"
+#include "MUnion.hpp"
 #include "MCoClass.hpp"
 #include "MInterface.hpp"
 #include "MTypeDef.hpp"
@@ -70,6 +71,9 @@ MNode::CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
         break;
     case TKIND_MODULE:
         res.push_back(MakePtr<MModule>(this, ti, ta));
+        break;
+    case TKIND_UNION:
+        res.push_back(MakePtr<MUnion>(this, ti, ta));
         break;
     default:
         break;

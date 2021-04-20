@@ -62,7 +62,7 @@ stringifyTypeDesc(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo)
         return stringifyCustomType(typeDesc->hreftype, pTypeInfo);
     case VT_I2: return L"short";
     case VT_I4: return L"long";
-    case VT_R4: return L"single";
+    case VT_R4: return L"float";
     case VT_R8: return L"double";
     case VT_CY: return L"CURRENCY";
     case VT_DATE: return L"DATE";
@@ -186,7 +186,7 @@ MTypeDesc::GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String
         return ret;
     case VT_I2: return L"short " + name;
     case VT_I4: return L"long " + name;
-    case VT_R4: return L"single " + name;
+    case VT_R4: return L"float " + name;
     case VT_R8: return L"double " + name;
     case VT_CY: return L"CURRENCY " + name;
     case VT_DATE: return L"DATE " + name;

@@ -15,8 +15,12 @@ static String stringifyCustomType(HREFTYPE refType, MComPtr<ITypeInfo> pti)
     {
         return L"UnknownCustomType";
     }
-    String str = bstrType;
-    ::SysFreeString(bstrType);
+    String str;
+    if (bstrType)
+    {
+        str = bstrType;
+        ::SysFreeString(bstrType);
+    }
     return str;
 }
 
@@ -82,7 +86,7 @@ stringifyTypeDesc(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo)
     case VT_LPSTR: return L"LPSTR";
     case VT_LPWSTR: return L"LPWSTR";
     default:
-        return L"[??Unknown type : " + std::to_wstring(typeDesc->vt) + L"]";
+        return L"<unknown type: " + std::to_wstring(typeDesc->vt) + L">";
     }
 }
 
@@ -131,4 +135,81 @@ void MTypeDesc::GenDepending(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSe
     String str = bstrType;
     ::SysFreeString(bstrType);
     depending.insert(str);
+}
+
+String MTypeDesc::GetTypedName(MComPtr<ITypeInfo> ti, String name)
+{
+    return MTypeDesc::GetTypedName(this, ti, name);
+}
+
+/*static*/ String
+MTypeDesc::GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String name)
+{
+    String ret;
+    switch (typeDesc->vt)
+    {
+    case VT_PTR:
+        ret = stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo);
+        ret += L"* ";
+        ret += name;
+        return ret;
+    case VT_SAFEARRAY:
+        ret += L"SAFEARRAY(";
+        ret += stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo);
+        ret += L") ";
+        ret += name;
+        return ret;
+    case VT_CARRAY:
+        ret += name;
+        for (INT dim = 0; dim < typeDesc->lpadesc->cDims; ++dim)
+        {
+            ret += L"[";
+            if (typeDesc->lpadesc->rgbounds[dim].lLbound == 0)
+            {
+                ret += std::to_wstring(typeDesc->lpadesc->rgbounds[dim].cElements);
+            }
+            else
+            {
+                ret += std::to_wstring(typeDesc->lpadesc->rgbounds[dim].lLbound);
+                ret += L"...";
+                ret += std::to_wstring(typeDesc->lpadesc->rgbounds[dim].cElements +
+                                       typeDesc->lpadesc->rgbounds[dim].lLbound - 1);
+            }
+            ret += L"]";
+        }
+        ret = GetTypedName(&typeDesc->lpadesc->tdescElem, pTypeInfo, ret);
+        return ret;
+    case VT_USERDEFINED:
+        ret += stringifyCustomType(typeDesc->hreftype, pTypeInfo);
+        ret += L" ";
+        ret += name;
+        return ret;
+    case VT_I2: return L"short " + name;
+    case VT_I4: return L"long " + name;
+    case VT_R4: return L"single " + name;
+    case VT_R8: return L"double " + name;
+    case VT_CY: return L"CURRENCY " + name;
+    case VT_DATE: return L"DATE " + name;
+    case VT_BSTR: return L"BSTR " + name;
+    case VT_DISPATCH: return L"IDispatch* " + name;
+    case VT_ERROR: return L"SCODE " + name;
+    case VT_BOOL: return L"VARIANT_BOOL " + name;
+    case VT_VARIANT: return L"VARIANT " + name;
+    case VT_UNKNOWN: return L"IUnknown* " + name;
+    case VT_UI1: return L"unsigned char " + name;
+    case VT_DECIMAL: return L"DECIMAL " + name;
+    case VT_I1: return L"char " + name;
+    case VT_UI2: return L"unsigned short " + name;
+    case VT_UI4: return L"unsigned long " + name;
+    case VT_I8: return L"int64 " + name;
+    case VT_UI8: return L"uint64 " + name;
+    case VT_INT: return L"int " + name;
+    case VT_UINT: return L"unsigned int " + name;
+    case VT_HRESULT: return L"HRESULT " + name;
+    case VT_VOID: return L"void " + name;
+    case VT_LPSTR: return L"LPSTR " + name;
+    case VT_LPWSTR: return L"LPWSTR " + name;
+    default:
+        return L"<unknown type: " + std::to_wstring(typeDesc->vt) + L"> " + name;
+    }
 }

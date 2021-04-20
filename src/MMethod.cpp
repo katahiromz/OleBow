@@ -63,8 +63,8 @@ void MMethod::Dump(MSmartWriter& writer, bool bAsDispatch)
             str += L"] ";
         }
         params.push_back(str +
-            reinterpret_cast<MTypeDesc&>(edp->tdesc).ComTypeNameAsString(m_ti) +
-            L" " + String(paramname));
+            reinterpret_cast<MTypeDesc&>(edp->tdesc)
+                .GetTypedName(m_ti, String(paramname)));
     }
 
     String head;

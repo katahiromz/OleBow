@@ -10,11 +10,12 @@ public:
         m_name = MTypeInfoExtra::GetDocumentationById(ti, (*vd)->memid);
         m_vd = vd;
         m_ti = ti;
-        m_type = reinterpret_cast<MTypeDesc&>((*m_vd)->elemdescVar.tdesc).ComTypeNameAsString(m_ti);
+        m_typed_name = reinterpret_cast<MTypeDesc&>(
+            (*m_vd)->elemdescVar.tdesc).GetTypedName(m_ti, m_name);
     }
     String Name() override
     {
-        return m_type + L" " + m_name;
+        return m_typed_name;
     }
     String ShortName() override
     {
@@ -52,8 +53,8 @@ public:
         return ret;
     }
 protected:
-    String m_type;
     String m_name;
+    String m_typed_name;
     MComPtr<ITypeInfo> m_ti;
     Ptr<MVarDesc> m_vd;
 };

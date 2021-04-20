@@ -47,7 +47,7 @@ public:
         writer.write_attrs(attrs);
 
         auto& ed = m_vd->elemDescVar();
-        writer.write_line(ed.TypeDesc().ComTypeNameAsString(m_ti) + L" " + Name() + L";");
+        writer.write_line(ed.TypeDesc().GetTypedName(m_ti, m_name) + L";");
     }
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override
     {

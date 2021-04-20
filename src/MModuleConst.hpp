@@ -8,13 +8,13 @@ public:
     {
         m_parent = parent;
         m_idx = idx;
-        auto str = vd->elemDescVar().TypeDesc().ComTypeNameAsString(ti);
-        m_name = str + L" " + MTypeInfoExtra::GetDocumentationById(ti, (*vd)->memid);
+        m_name = MTypeInfoExtra::GetDocumentationById(ti, (*vd)->memid);
+        m_typed_name = vd->elemDescVar().TypeDesc().GetTypedName(ti, m_name);
         m_val = (bstr_t)vd->varValue();
     }
     String Name() override
     {
-        return L"const " + m_name;
+        return L"const " + m_typed_name;
     }
     String ShortName() override
     {
@@ -33,7 +33,7 @@ public:
     }
     void Dump(MSmartWriter& writer) override
     {
-        writer.write_line(L"const " + m_name + L" = " + m_val + L";");
+        writer.write_line(L"const " + m_typed_name + L" = " + m_val + L";");
     }
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override
     {
@@ -52,5 +52,6 @@ public:
 protected:
     int m_idx;
     String m_name;
+    String m_typed_name;
     String m_val;
 };

@@ -10,7 +10,7 @@ public:
         m_idx = idx;
         m_name = MTypeInfoExtra::GetDocumentationById(ti, (*vd)->memid);
         m_typed_name = vd->elemDescVar().TypeDesc().GetTypedName(ti, m_name);
-        m_val = (bstr_t)vd->varValue();
+        m_val = MTypeInfoExtra::QuoteString(vd->varValue());
     }
     String Name() override
     {

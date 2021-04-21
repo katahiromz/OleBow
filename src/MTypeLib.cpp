@@ -150,7 +150,85 @@ void MTypeLib::DumpMetadata(MSmartWriter& writer)
 void MTypeLib::Sort()
 {
     auto children = Children();
-    // TODO:
+
+    // create a name-to-node mapping
+    Dictionary<String, Ptr<MNode> > name_to_node;
+    for (auto& child : *children)
+    {
+        name_to_node[child->ShortName()] = child;
+    }
+
+    // create a depending mapping (the node name to the depending nodes)
+    Dictionary<String, StringSet> depending_map;
+    for (auto& child : *children)
+    {
+        Ptr<StringSet> d = child->Depending();
+        for (auto& item : *d)
+        {
+            auto name = child->ShortName();
+            if (name_to_node.count(item) > 0 && name != item)
+            {
+                depending_map[name].insert(item);
+            }
+        }
+    }
+
+#if 0
+    for (auto& pair : depending_map)
+    {
+        for (auto& item : pair.second)
+        {
+            printf("%ls: %ls\n", pair.first.c_str(), item.c_str());
+        }
+    }
+#endif
+
+    // sort
+    auto ret = MakePtr<MNodeList>();
+    size_t retry_count = 0;
+retry:
+    while (depending_map.size())
+    {
+        auto added = MakePtr<StringSet>();
+        if (retry_count++ > 100)
+        {
+            // TODO:
+            // :: IBindCtx: IRunningObjectTable
+            // :: IEnumMoniker: IMoniker
+            // :: IMoniker: IBindCtx
+            // :: IMoniker: IEnumMoniker
+            // :: IRunningObjectTable: IEnumMoniker
+            // :: IRunningObjectTable: IMoniker
+            // :: PartitionMoniker: IMoniker
+            // :: SoapMoniker: IMoniker
+            assert(0);
+            break;
+        }
+        for (auto& pair : name_to_node)
+        {
+            if (depending_map.find(pair.first) == depending_map.end() ||
+                depending_map[pair.first].empty())
+            {
+                added->insert(pair.first);
+                depending_map.erase(pair.first);
+            }
+        }
+        if (added->empty())
+            goto hell;
+        for (auto& item : *added)
+        {
+            ret->insert(ret->end(), name_to_node[item]);
+            for (auto& pair : depending_map)
+            {
+                pair.second.erase(item);
+            }
+            depending_map.erase(item);
+        }
+    }
+hell:
+    //printf("%d\n", (int)ret->size());
+    assert(ret->size() == m_children->size());
+    m_children = ret;
 }
 
 void MTypeLib::DumpDependency(MWriter& writer)

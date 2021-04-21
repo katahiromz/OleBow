@@ -40,7 +40,7 @@ typedef Set<String> StringSet;
 #endif
 
 EXTERN_C OLEBOWAPI void APIENTRY
-DumpTypeLib(MWriter& writer, const wchar_t *path, bool sort);
+DumpTypeLib(MWriter& writer, const wchar_t *path, bool sort, bool dependency);
 
 String GetString(const GUID& guid);
 String GetCallConvString(CALLCONV callconv);

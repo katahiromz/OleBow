@@ -1,13 +1,26 @@
 #include "OleBow.hpp"
 #include "MTypeLib.hpp"
 #include "MTypeLibAttr.hpp"
+#include "MFileWriter.hpp"
 #include <shlwapi.h>
 
 EXTERN_C OLEBOWAPI void APIENTRY
-DumpTypeLib(MWriter& writer, const wchar_t *path, bool sort)
+DumpTypeLib(MWriter& writer, const wchar_t *path, bool sort, bool dependency)
 {
-    auto tlib = MakePtr<MTypeLib>(sort);
+    auto tlib = MakePtr<MTypeLib>();
     tlib->Load(path);
+
+    if (sort)
+    {
+        tlib->Sort();
+    }
+
+    if (dependency)
+    {
+        MFileWriter writer(stdout);
+        tlib->DumpDependency(writer);
+    }
+
     MSmartWriter smart_writer(writer);
     tlib->Dump(smart_writer);
 }

@@ -5,12 +5,14 @@
 class MTypeLib : public MNode
 {
 public:
-    MTypeLib(bool sort = false);
-    MTypeLib(const wchar_t *path, bool sort = false);
+    MTypeLib();
+    MTypeLib(const wchar_t *path);
     ~MTypeLib();
     void Load(const wchar_t *path);
     void Unload();
+    void Sort();
     void Dump(MSmartWriter& writer) override;
+    void DumpDependency(MWriter& writer);
     Ptr<StringSet> GenDepending() override
     {
         assert(0);
@@ -22,7 +24,6 @@ public:
         return NULL;
     }
 protected:
-    bool m_sort;
     TLIBATTR *m_pAttr;
     String m_name;
     MComPtr<ITypeLib> m_tlib;

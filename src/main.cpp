@@ -3,7 +3,7 @@
 
 static void show_version(void)
 {
-    std::puts("OleBow ver.0.7.4 by katahiromz");
+    std::puts("OleBow ver.0.7.5 by katahiromz");
     std::puts("See: https://github.com/katahiromz/OleBow");
 }
 
@@ -15,10 +15,11 @@ static void show_help(void)
     std::puts("  --version       Show version information");
     std::puts("  --codepage XXX  Set output codepage");
     std::puts("  --sort          Do sort by dependency");
+    std::puts("  --dependency    Dump the dependency to stdout");
 }
 
 INT JustDoIt(const wchar_t *input_file, const wchar_t *output_file,
-             int codepage, bool sort)
+             int codepage, bool sort, bool dependency)
 {
     HRESULT hr = ::OleInitialize(NULL);
 
@@ -26,7 +27,7 @@ INT JustDoIt(const wchar_t *input_file, const wchar_t *output_file,
     try
     {
         MFileWriter writer(output_file, codepage);
-        DumpTypeLib(writer, input_file, sort);
+        DumpTypeLib(writer, input_file, sort, dependency);
         ok = true;
     }
     catch(...)
@@ -49,7 +50,7 @@ int wmain(int argc, wchar_t **wargv)
     }
 
     int codepage = 0;
-    bool sort = false;
+    bool sort = false, dependency = false;
     String input_file, output_file;
     for (int i = 1; i < argc; ++i)
     {
@@ -73,6 +74,11 @@ int wmain(int argc, wchar_t **wargv)
         if (arg == L"--sort")
         {
             sort = true;
+            continue;
+        }
+        if (arg == L"--dependency")
+        {
+            dependency = true;
             continue;
         }
         if (arg[0] == L'-')
@@ -100,7 +106,8 @@ int wmain(int argc, wchar_t **wargv)
         output_file = input_file + L".idl";
     }
 
-    return JustDoIt(input_file.c_str(), output_file.c_str(), codepage, sort);
+    return JustDoIt(input_file.c_str(), output_file.c_str(), codepage,
+                    sort, dependency);
 }
 
 int main(int argc, char **argv)

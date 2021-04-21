@@ -10,12 +10,13 @@
 #include <shlwapi.h>
 #include <algorithm>
 
-MTypeLib::MTypeLib(bool sort) : m_sort(sort), m_pAttr(NULL)
+MTypeLib::MTypeLib()
+    : m_pAttr(NULL)
 {
 }
 
-MTypeLib::MTypeLib(const wchar_t *path, bool sort)
-    : m_sort(sort), m_pAttr(NULL)
+MTypeLib::MTypeLib(const wchar_t *path)
+    : m_pAttr(NULL)
 {
     Load(path);
 }
@@ -151,6 +152,53 @@ void MTypeLib::DumpMetadata(MSmartWriter& writer)
     }
 }
 
+void MTypeLib::Sort()
+{
+    auto children = Children();
+    std::sort(children->begin(), children->end(),
+        [](const Ptr<MNode>& i1, const Ptr<MNode>& i2) {
+            if (i1->Depending()->empty() && !i2->Depending()->empty())
+                return true;
+            if (!i1->Depending()->empty() && i2->Depending()->empty())
+                return false;
+            for (auto& item : *i1->Providing())
+            {
+                if (i2->Depending()->count(item) > 0)
+                    return true;
+            }
+            for (auto& item : *i2->Providing())
+            {
+                if (i1->Depending()->count(item) > 0)
+                    return false;
+            }
+            if (i1->ShortName() < i2->ShortName())
+                return true;
+            if (i1->ShortName() < i2->ShortName())
+                return false;
+            return false;
+        }
+    );
+}
+
+void MTypeLib::DumpDependency(MWriter& writer)
+{
+    auto children = Children();
+    for (auto& child : *children)
+    {
+        auto providing = child->Providing();
+        auto p = mstr_join(*providing, L", ");
+        auto depending = child->Depending();
+        auto d = mstr_join(*depending, L", ");
+
+        writer.Write(child->ShortName().c_str());
+        writer.Write(L" : [");
+        writer.Write(p.c_str());
+        writer.Write(L"] : {");
+        writer.Write(d.c_str());
+        writer.Write(L"}.\n");
+    }
+}
+
 void MTypeLib::Dump(MSmartWriter& writer)
 {
     writer.write_line(L"// Generated .IDL file (by OleBow)");
@@ -175,32 +223,6 @@ void MTypeLib::Dump(MSmartWriter& writer)
         writer.write_empty_line();
 
         auto children = Children();
-        if (m_sort)
-        {
-            std::sort(children->begin(), children->end(),
-                [](const Ptr<MNode>& i1, const Ptr<MNode>& i2) {
-                    if (i1->Depending()->empty() && !i2->Depending()->empty())
-                        return true;
-                    if (!i1->Depending()->empty() && i2->Depending()->empty())
-                        return false;
-                    for (auto& item : *i1->Providing())
-                    {
-                        if (i2->Depending()->count(item) > 0)
-                            return true;
-                    }
-                    for (auto& item : *i2->Providing())
-                    {
-                        if (i1->Depending()->count(item) > 0)
-                            return false;
-                    }
-                    if (i1->ShortName() < i2->ShortName())
-                        return true;
-                    if (i1->ShortName() < i2->ShortName())
-                        return false;
-                    return false;
-                }
-            );
-        }
 
         Set<String> ifaces;
         for (auto& child : *children)

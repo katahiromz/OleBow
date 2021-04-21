@@ -184,7 +184,7 @@ void MTypeLib::Sort()
 #endif
 
     // sort
-    auto ret = MakePtr<MNodeList>();
+    StringList names;
     size_t retry_count = 0;
 retry:
     while (depending_map.size())
@@ -193,6 +193,16 @@ retry:
         if (retry_count++ > 100)
         {
             // TODO:
+#if 1
+            printf("---------\n");
+            for (auto& pair : depending_map)
+            {
+                for (auto& item : pair.second)
+                {
+                    printf("::: %ls: %ls\n", pair.first.c_str(), item.c_str());
+                }
+            }
+#endif
             // :: IBindCtx: IRunningObjectTable
             // :: IEnumMoniker: IMoniker
             // :: IMoniker: IBindCtx
@@ -217,7 +227,8 @@ retry:
             goto hell;
         for (auto& item : *added)
         {
-            ret->insert(ret->end(), name_to_node[item]);
+            if (std::find(names.begin(), names.end(), item) == names.end())
+                names.push_back(item);
             for (auto& pair : depending_map)
             {
                 pair.second.erase(item);
@@ -226,8 +237,12 @@ retry:
         }
     }
 hell:
-    //printf("%d\n", (int)ret->size());
-    assert(ret->size() == m_children->size());
+    assert(names.size() == m_children->size());
+    auto ret = MakePtr<MNodeList>();
+    for (auto& name : names)
+    {
+        ret->push_back(name_to_node[name]);
+    }
     m_children = ret;
 }
 

@@ -185,6 +185,7 @@ void MTypeLib::Sort()
 
     // sort
     StringList names;
+    StringSet name_set;
     size_t retry_count = 0;
 retry:
     while (depending_map.size())
@@ -227,8 +228,11 @@ retry:
             goto hell;
         for (auto& item : *added)
         {
-            if (std::find(names.begin(), names.end(), item) == names.end())
+            if (name_set.count(item) == 0)
+            {
                 names.push_back(item);
+                name_set.insert(item);
+            }
             for (auto& pair : depending_map)
             {
                 pair.second.erase(item);

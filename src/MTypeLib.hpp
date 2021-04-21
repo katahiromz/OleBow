@@ -30,7 +30,6 @@ protected:
 
     String Name() override;
     String ShortName() override;
-    String ObjectName() override;
     String Class() override
     {
         return L"MTypeLib";

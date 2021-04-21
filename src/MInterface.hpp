@@ -37,10 +37,6 @@ public:
     {
         return m_name;
     }
-    String ObjectName() override
-    {
-        return m_name + L"#i";
-    }
     String Class() override
     {
         return L"MInterface";

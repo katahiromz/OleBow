@@ -25,7 +25,6 @@ public:
 
     virtual String Name() = 0;
     virtual String ShortName() = 0;
-    virtual String ObjectName() = 0;
     virtual String Class() = 0;
     virtual void GetAttrs(StringList& attrs) = 0;
     virtual Ptr<MNodeList> GenChildren() = 0;

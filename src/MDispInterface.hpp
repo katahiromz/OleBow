@@ -20,10 +20,6 @@ public:
     {
         return m_name;
     }
-    String ObjectName() override
-    {
-        return m_name + L"#di";
-    }
     String Class() override
     {
         return L"MDispInterface";

@@ -21,10 +21,6 @@ public:
     {
         return m_name;
     }
-    String ObjectName() override
-    {
-        return L"";
-    }
     String Class() override
     {
         return L"MRecordMember";

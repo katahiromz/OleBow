@@ -17,10 +17,6 @@ public:
     {
         return L"";
     }
-    String ObjectName() override
-    {
-        return L"";
-    }
     String Class() override
     {
         return L"MIDispatchMethods";

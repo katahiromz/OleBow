@@ -56,11 +56,6 @@ String MTypeLib::ShortName()
     return MTypeInfoExtra::GetName(m_tlib);
 }
 
-String MTypeLib::ObjectName()
-{
-    return ShortName();
-}
-
 void MTypeLib::GetAttrs(StringList& attrs)
 {
     if (m_pAttr)

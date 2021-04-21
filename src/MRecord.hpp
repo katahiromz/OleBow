@@ -23,10 +23,6 @@ public:
     {
         return m_name;
     }
-    String ObjectName() override
-    {
-        return m_name + L"#s";
-    }
     String Class() override
     {
         return L"MRecord";

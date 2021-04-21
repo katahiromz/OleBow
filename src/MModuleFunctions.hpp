@@ -17,10 +17,6 @@ public:
     {
         return Name();
     }
-    String ObjectName() override
-    {
-        return L"";
-    }
     String Class() override
     {
         return L"MModuleFunctions";

@@ -22,10 +22,6 @@ public:
     {
         return m_name;
     }
-    String ObjectName() override
-    {
-        return m_name + L"#c";
-    }
     String Class() override
     {
         return L"MCoClass";

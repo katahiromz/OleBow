@@ -87,12 +87,6 @@ public:
         }
         return ret;
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        auto ret = MakePtr<StringSet>();
-        ret->insert(m_name);
-        return ret;
-    }
 protected:
     String m_name;
     Ptr<MTypeAttr> m_ta;

@@ -67,10 +67,6 @@ public:
     {
         return MakePtr<StringSet>();
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        return MakePtr<StringSet>();
-    }
 protected:
     String m_name;
     MComPtr<ITypeInfo> m_ti;

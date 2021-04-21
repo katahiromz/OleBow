@@ -55,10 +55,6 @@ public:
         }
         return ret;
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        return MakePtr<StringSet>();
-    }
 protected:
     MDispInterface* m_di;
 };

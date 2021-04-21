@@ -59,12 +59,6 @@ public:
             reinterpret_cast<MTypeDesc&>(elast->tdesc).GenDepending(m_ti, *ret);
         return ret;
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        auto ret = MakePtr<StringSet>();
-        ret->insert(m_name);
-        return ret;
-    }
 protected:
     String m_name;
     Ptr<MFuncDesc> m_fd;

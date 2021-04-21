@@ -67,12 +67,6 @@ public:
         reinterpret_cast<MTypeDesc&>((*m_ta)->tdescAlias).GenDepending(m_ti, *ret);
         return ret;
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        auto ret = MakePtr<StringSet>();
-        ret->insert(m_name);
-        return ret;
-    }
 protected:
     MComPtr<ITypeInfo> m_ti;
     MComPtr<ITypeInfo> m_oti;

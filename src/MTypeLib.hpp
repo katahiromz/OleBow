@@ -18,11 +18,6 @@ public:
         assert(0);
         return NULL;
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        assert(0);
-        return NULL;
-    }
 protected:
     TLIBATTR *m_pAttr;
     String m_name;

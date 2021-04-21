@@ -52,10 +52,6 @@ public:
         }
         return ret;
     }
-    Ptr<StringSet> GenProviding() override
-    {
-        return MakePtr<StringSet>();
-    }
 protected:
     MModule* m_module;
 };

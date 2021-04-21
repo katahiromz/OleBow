@@ -25,6 +25,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MUnionMember";
+    }
     void GetAttrs(StringList& attrs) override
     {
     }

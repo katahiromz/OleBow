@@ -31,6 +31,10 @@ protected:
     String Name() override;
     String ShortName() override;
     String ObjectName() override;
+    String Class() override
+    {
+        return L"MTypeLib";
+    }
     void GetAttrs(StringList& attrs) override;
     Ptr<MNodeList> GenChildren() override;
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override

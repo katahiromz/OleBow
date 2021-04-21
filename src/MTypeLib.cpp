@@ -190,6 +190,8 @@ void MTypeLib::DumpDependency(MWriter& writer)
         auto depending = child->Depending();
         auto d = mstr_join(*depending, L", ");
 
+        writer.Write(child->Class().c_str());
+        writer.Write(L" ");
         writer.Write(child->ShortName().c_str());
         writer.Write(L" : [");
         writer.Write(p.c_str());

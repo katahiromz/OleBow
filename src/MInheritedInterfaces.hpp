@@ -23,6 +23,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MInheritedInterfaces";
+    }
     void GetAttrs(StringList& attrs) override
     {
     }

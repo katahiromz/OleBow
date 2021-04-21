@@ -23,6 +23,10 @@ public:
     {
         return m_name + L"#i";
     }
+    String Class() override
+    {
+        return L"MCoClassInterface";
+    }
     void GetAttrs(StringList& attrs) override
     {
         if (m_flags & IMPLTYPEFLAG_FDEFAULT)

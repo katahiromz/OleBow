@@ -26,6 +26,10 @@ public:
     {
         return m_name + L"#c";
     }
+    String Class() override
+    {
+        return L"MCoClass";
+    }
     void GetAttrs(StringList& attrs) override
     {
         AddUUID(attrs, (*m_ta)->guid);
@@ -51,7 +55,10 @@ public:
             m_ti->GetRefTypeOfImplType(iImplType, &href);
             MComPtr<ITypeInfo> ti2;
             m_ti->GetRefTypeInfo(href, &ti2);
-            CommonBuildTlibNode(ti2, false, false, *ret.get());
+            INT flags;
+            m_ti->GetImplTypeFlags(iImplType, &flags);
+            auto iface = MakePtr<MCoClassInterface>(this, ti2, flags);
+            ret->push_back(iface);
         }
         return ret;
     }
@@ -62,16 +69,10 @@ public:
         writer.write_attrs(attrs);
         writer.write_line(Name() + L" {");
         writer.indent();
-        for (UINT i = 0; i < (*m_ta)->cImplTypes; ++i)
+        auto children = Children();
+        for (auto& child : *children)
         {
-            HREFTYPE href;
-            m_ti->GetRefTypeOfImplType(i, &href);
-            MComPtr<ITypeInfo> ti2;
-            m_ti->GetRefTypeInfo(href, &ti2);
-            INT flags;
-            m_ti->GetImplTypeFlags(i, &flags);
-            auto iface = MakePtr<MCoClassInterface>(this, ti2, flags);
-            iface->Dump(writer);
+            child->Dump(writer);
         }
         writer.unindent();
         writer.write_line(L"};");

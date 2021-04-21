@@ -24,6 +24,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MDispProperty";
+    }
     void GetAttrs(StringList& attrs) override
     {
         {

@@ -26,6 +26,10 @@ public:
     {
         return m_name + L"#m";
     }
+    String Class() override
+    {
+        return L"MMethod";
+    }
     void GetAttrs(StringList& attrs) override;
     Ptr<MNodeList> GenChildren() override
     {

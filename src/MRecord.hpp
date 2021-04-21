@@ -27,6 +27,10 @@ public:
     {
         return m_name + L"#s";
     }
+    String Class() override
+    {
+        return L"MRecord";
+    }
     void GetAttrs(StringList& attrs) override
     {
     }

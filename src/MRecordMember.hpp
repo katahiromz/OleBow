@@ -25,6 +25,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MRecordMember";
+    }
     void GetAttrs(StringList& attrs) override
     {
     }

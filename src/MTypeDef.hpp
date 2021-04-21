@@ -28,6 +28,10 @@ public:
     {
         return m_name + L"#i";
     }
+    String Class() override
+    {
+        return L"MTypeDef";
+    }
     void GetAttrs(StringList& attrs) override
     {
         attrs.push_back(L"public");

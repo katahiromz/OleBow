@@ -22,6 +22,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MIDispatchProperties";
+    }
     void GetAttrs(StringList& attrs) override
     {
     }

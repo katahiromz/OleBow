@@ -60,10 +60,13 @@ MNode::CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
         res.push_back(MakePtr<MInterface>(this, ti, ta, topLevel));
         break;
     case TKIND_DISPATCH:
-        res.push_back(MakePtr<MDispInterface>(this, ti, ta, topLevel));
         if (swapfordispatch && MTypeInfoExtra::SwapForInterface(ti, ta))
         {
             res.push_back(MakePtr<MInterface>(this, ti, ta, topLevel));
+        }
+        else
+        {
+            res.push_back(MakePtr<MDispInterface>(this, ti, ta, topLevel));
         }
         break;
     case TKIND_COCLASS:

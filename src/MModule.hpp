@@ -33,6 +33,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MModule";
+    }
     void GetAttrs(StringList& attrs) override
     {
         if (m_dllname.size())

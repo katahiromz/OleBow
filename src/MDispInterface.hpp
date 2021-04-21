@@ -24,6 +24,10 @@ public:
     {
         return m_name + L"#di";
     }
+    String Class() override
+    {
+        return L"MDispInterface";
+    }
     void GetAttrs(StringList& attrs) override;
     Ptr<MNodeList> GenChildren() override;
     Ptr<MNodeList> MethodChildren()

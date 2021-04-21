@@ -24,6 +24,10 @@ public:
     {
         return L"";
     }
+    String Class() override
+    {
+        return L"MModuleConst";
+    }
     void GetAttrs(StringList& attrs) override
     {
     }

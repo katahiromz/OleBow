@@ -95,6 +95,7 @@ public:
             auto ret2 = child->Depending();
             ret->insert(ret2->begin(), ret2->end());
         }
+        ret->insert(m_base);
         return ret;
     }
 protected:

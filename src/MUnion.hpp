@@ -17,7 +17,7 @@ public:
     }
     String Name() override
     {
-        return L"union " + m_name;
+        return L"union tag" + m_name;
     }
     String ShortName() override
     {

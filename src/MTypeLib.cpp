@@ -5,6 +5,7 @@
 #include "MInterface.hpp"
 #include "MDispInterface.hpp"
 #include "MRecord.hpp"
+#include "MUnion.hpp"
 #include "MCoClass.hpp"
 #include "MEnum.hpp"
 #include <shlwapi.h>

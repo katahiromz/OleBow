@@ -261,9 +261,11 @@ retry:
                 printf("---------\n");
                 for (auto& pair : depending_map)
                 {
+                    auto& name = pair.first;
                     for (auto& item : pair.second)
                     {
-                        printf(":: %ls: %ls\n", pair.first.c_str(), item.c_str());
+                        printf(":: %ls %ls: %ls\n", name_to_node[pair.first]->Class().c_str(),
+                               name.c_str(), item.c_str());
                     }
                 }
 #endif
@@ -387,6 +389,14 @@ void MTypeLib::Dump(MSmartWriter& writer)
             if (std::dynamic_pointer_cast<MDispInterface>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
+            }
+            if (std::dynamic_pointer_cast<MRecord>(child))
+            {
+                fwdDeclarations.insert(std::make_pair(L"struct " + child->Name(), child->Name()));
+            }
+            if (std::dynamic_pointer_cast<MUnion>(child))
+            {
+                fwdDeclarations.insert(std::make_pair(L"union " + child->Name(), child->Name()));
             }
         }
 

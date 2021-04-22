@@ -17,7 +17,7 @@ public:
     }
     String Name() override
     {
-        return L"typedef struct tag" + m_name;
+        return L"typedef struct " + m_name;
     }
     String ShortName() override
     {

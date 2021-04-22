@@ -17,7 +17,7 @@ public:
     }
     String Name() override
     {
-        return L"typedef union tag" + m_name;
+        return L"typedef union " + m_name;
     }
     String ShortName() override
     {

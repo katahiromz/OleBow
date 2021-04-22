@@ -253,9 +253,9 @@ retry:
         }
         if (!flag)
         {
-#if 1
             if (depending_map.size())
             {
+#if 1
                 printf("---------\n");
                 for (auto& pair : depending_map)
                 {
@@ -264,6 +264,8 @@ retry:
                         printf(":: %ls: %ls\n", pair.first.c_str(), item.c_str());
                     }
                 }
+#endif
+                // TODO:
                 for (auto& pair : depending_map)
                 {
                     names.push_back(pair.first);
@@ -271,7 +273,6 @@ retry:
                 }
                 depending_map.clear();
             }
-#endif
             break;
         }
     }

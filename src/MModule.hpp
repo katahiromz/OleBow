@@ -33,6 +33,7 @@ public:
     {
         return L"MModule";
     }
+    INT SortOfType() const override { return 3; }
     void GetAttrs(StringList& attrs) override
     {
         if (m_dllname.size())

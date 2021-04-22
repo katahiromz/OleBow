@@ -24,6 +24,7 @@ public:
     {
         return L"MEnum";
     }
+    INT SortOfType() const override { return 0; }
     void GetAttrs(StringList& attrs) override
     {
         String str;

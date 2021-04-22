@@ -24,6 +24,7 @@ public:
     {
         return L"MDispInterface";
     }
+    INT SortOfType() const override { return 2; }
     void GetAttrs(StringList& attrs) override;
     Ptr<MNodeList> GenChildren() override;
     Ptr<MNodeList> MethodChildren()

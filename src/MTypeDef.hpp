@@ -28,6 +28,7 @@ public:
     {
         return L"MTypeDef";
     }
+    INT SortOfType() const override { return 1; }
     void GetAttrs(StringList& attrs) override
     {
         attrs.push_back(L"public");

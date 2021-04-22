@@ -27,6 +27,7 @@ public:
     {
         return L"MRecord";
     }
+    INT SortOfType() const override { return 1; }
     void GetAttrs(StringList& attrs) override
     {
     }

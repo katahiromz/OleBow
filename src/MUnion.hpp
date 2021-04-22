@@ -27,6 +27,7 @@ public:
     {
         return L"MUnion";
     }
+    INT SortOfType() const override { return 1; }
     void GetAttrs(StringList& attrs) override
     {
     }

@@ -26,6 +26,7 @@ public:
     {
         return L"MCoClass";
     }
+    INT SortOfType() const override { return 4; }
     void GetAttrs(StringList& attrs) override
     {
         AddUUID(attrs, (*m_ta)->guid);

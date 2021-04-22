@@ -257,7 +257,7 @@ retry:
         {
             if (depending_map.size())
             {
-#if 1
+#if 0
                 printf("---------\n");
                 for (auto& pair : depending_map)
                 {
@@ -267,12 +267,30 @@ retry:
                     }
                 }
 #endif
-                // TODO:
+                StringList strs;
                 for (auto& pair : depending_map)
                 {
-                    names.push_back(pair.first);
-                    name_set.insert(pair.first);
+                    strs.push_back(pair.first);
                 }
+                std::sort(strs.begin(), strs.end(),
+                    [&](const String& name1, const String& name2) {
+                        auto node1 = name_to_node[name1];
+                        auto node2 = name_to_node[name2];
+                        auto sort1 = node1->SortOfType();
+                        auto sort2 = node2->SortOfType();
+                        if (sort1 < sort2)
+                            return true;
+                        if (sort1 > sort2)
+                            return false;
+                        if (name1 < name2)
+                            return true;
+                        if (name1 > name2)
+                            return false;
+                        return false;
+                    }
+                );
+                names.insert(names.end(), strs.begin(), strs.end());
+                name_set.insert(strs.begin(), strs.end());
                 depending_map.clear();
             }
             break;
@@ -280,6 +298,7 @@ retry:
     }
 hell:
     assert(names.size() == m_children->size());
+#if 0
     if (names.size() != m_children->size())
     {
         fprintf(stderr, "%d, %d\n", (int)names.size(), (int)m_children->size());
@@ -292,6 +311,7 @@ hell:
             fprintf(stderr, "ShortName: %ls\n", node->ShortName().c_str());
         }
     }
+#endif
     auto ret = MakePtr<MNodeList>();
     for (auto& name : names)
     {

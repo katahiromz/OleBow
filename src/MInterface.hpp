@@ -41,6 +41,7 @@ public:
     {
         return L"MInterface";
     }
+    INT SortOfType() const override { return 2; }
     void GetAttrs(StringList& attrs) override
     {
         AddUUID(attrs, (*m_ta)->guid);

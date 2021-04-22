@@ -173,6 +173,8 @@ void MTypeLib::Sort()
         }
     }
 
+    StringList names;
+    StringSet name_set;
 depending_retry:
     for (auto& pair1 : depending_map)
     {
@@ -190,6 +192,12 @@ depending_retry:
         }
         if (!flag)
         {
+            auto& item = pair1.first;
+            if (name_set.count(item) == 0)
+            {
+                names.push_back(item);
+                name_set.insert(item);
+            }
             depending_map.erase(pair1.first);
             goto depending_retry;
         }
@@ -206,8 +214,6 @@ depending_retry:
 #endif
 
     // sort
-    StringList names;
-    StringSet name_set;
 retry:
     while (depending_map.size())
     {

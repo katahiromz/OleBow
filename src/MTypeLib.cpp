@@ -178,142 +178,62 @@ void MTypeLib::Sort()
 
     StringList names;
     StringSet name_set;
-depending_retry:
-    for (auto& pair1 : depending_map)
-    {
-        bool flag = false;
-        for (auto& pair2 : depending_map)
-        {
-            if (pair1.first != pair2.first)
-            {
-                if (pair2.second.count(pair1.first) > 0)
-                {
-                    flag = true;
-                    break;
-                }
-            }
-        }
-        if (!flag)
-        {
-            auto& item = pair1.first;
-            if (name_set.count(item) == 0)
-            {
-                names.push_back(item);
-                name_set.insert(item);
-            }
-            depending_map.erase(pair1.first);
-            goto depending_retry;
-        }
-    }
 
+erase_retry:
 #if 0
     for (auto& pair : depending_map)
     {
+        printf("== %ls", pair.first.c_str());
         for (auto& item : pair.second)
         {
-            printf("%ls: %ls\n", pair.first.c_str(), item.c_str());
+            printf(", %ls", item.c_str());
         }
+        printf("\n");
     }
 #endif
 
-    // sort
-retry:
-    while (depending_map.size())
+    bool flag = false;
+    for (auto& pair : depending_map)
     {
-        auto added = MakePtr<StringSet>();
-        for (auto& pair : name_to_node)
-        {
-            if (depending_map.find(pair.first) == depending_map.end() ||
-                depending_map[pair.first].empty())
-            {
-                added->insert(pair.first);
-                depending_map.erase(pair.first);
-            }
-        }
-        if (added->empty())
-            goto hell;
-        bool flag = false;
-        for (auto& item : *added)
+        auto& item = pair.first;
+        if (pair.second.empty())
         {
             if (name_set.count(item) == 0)
             {
                 names.push_back(item);
                 name_set.insert(item);
-            }
-            for (auto& pair : depending_map)
-            {
-                auto size1 = pair.second.size();
-                pair.second.erase(item);
-                auto size2 = pair.second.size();
-                if (size1 != size2)
-                    flag = true;
-            }
-            auto size1 = depending_map.size();
-            depending_map.erase(item);
-            auto size2 = depending_map.size();
-            if (size1 != size2)
+                for (auto& pair2 : depending_map)
+                {
+                    pair2.second.erase(item);
+                }
+                depending_map.erase(item);
                 flag = true;
-        }
-        if (!flag)
-        {
-            if (depending_map.size())
-            {
-#if 0
-                printf("---------\n");
-                for (auto& pair : depending_map)
-                {
-                    auto& name = pair.first;
-                    for (auto& item : pair.second)
-                    {
-                        printf(":: %ls %ls: %ls\n", name_to_node[pair.first]->Class().c_str(),
-                               name.c_str(), item.c_str());
-                    }
-                }
-#endif
-                StringList strs;
-                for (auto& pair : depending_map)
-                {
-                    strs.push_back(pair.first);
-                }
-                std::sort(strs.begin(), strs.end(),
-                    [&](const String& name1, const String& name2) {
-                        auto node1 = name_to_node[name1];
-                        auto node2 = name_to_node[name2];
-                        auto sort1 = node1->SortOfType();
-                        auto sort2 = node2->SortOfType();
-                        if (sort1 < sort2)
-                            return true;
-                        if (sort1 > sort2)
-                            return false;
-                        if (name1 < name2)
-                            return true;
-                        if (name1 > name2)
-                            return false;
-                        return false;
-                    }
-                );
-                names.insert(names.end(), strs.begin(), strs.end());
-                name_set.insert(strs.begin(), strs.end());
-                depending_map.clear();
+                goto erase_retry;
             }
-            break;
         }
     }
-hell:
+
+    for (auto& pair : depending_map)
+    {
+        auto& item = pair.first;
+        if (name_set.count(item) == 0)
+        {
+            names.push_back(item);
+            name_set.insert(item);
+        }
+    }
+
+#if 0
+    for (auto& item : names)
+    {
+        printf("=== %ls", item.c_str());
+        printf("\n");
+    }
+#endif
+
     assert(names.size() == m_children->size());
 #if 0
-    if (names.size() != m_children->size())
-    {
-        fprintf(stderr, "%d, %d\n", (int)names.size(), (int)m_children->size());
-        for (auto& name : names)
-        {
-            fprintf(stderr, "name: %ls\n", name.c_str());
-        }
-        for (auto& node : *m_children)
-        {
-            fprintf(stderr, "ShortName: %ls\n", node->ShortName().c_str());
-        }
-    }
+    fprintf(stderr, "%d, %d\n", (int)names.size(), (int)m_children->size());
 #endif
     auto ret = MakePtr<MNodeList>();
     for (auto& name : names)
@@ -393,11 +313,11 @@ void MTypeLib::Dump(MSmartWriter& writer)
             }
             if (std::dynamic_pointer_cast<MRecord>(child))
             {
-                fwdDeclarations.insert(std::make_pair(L"struct " + child->Name(), child->Name()));
+                fwdDeclarations.insert(std::make_pair(L"struct " + child->ShortName(), child->Name()));
             }
             if (std::dynamic_pointer_cast<MUnion>(child))
             {
-                fwdDeclarations.insert(std::make_pair(L"union " + child->Name(), child->Name()));
+                fwdDeclarations.insert(std::make_pair(L"union " + child->ShortName(), child->Name()));
             }
         }
 

@@ -1,6 +1,7 @@
 #include "MTypeDesc.hpp"
 
-static String stringifyCustomType(HREFTYPE refType, MComPtr<ITypeInfo> pti)
+static String
+stringifyCustomType(HREFTYPE refType, MComPtr<ITypeInfo> pti, String parent = L"")
 {
     MComPtr<ITypeInfo> pTypeInfo(pti);
     MComPtr<ITypeInfo> pCustTypeInfo;
@@ -21,26 +22,30 @@ static String stringifyCustomType(HREFTYPE refType, MComPtr<ITypeInfo> pti)
         str = bstrType;
         ::SysFreeString(bstrType);
     }
+    if (parent.size() && str == parent)
+    {
+        str = L"struct tag" + str;
+    }
     return str;
 }
 
 static String
-stringifyTypeDesc(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo)
+stringifyTypeDesc(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String parent = L"")
 {
     String ret;
     switch (typeDesc->vt)
     {
     case VT_PTR:
-        ret = stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo);
+        ret = stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo, parent);
         ret += L"*";
         return ret;
     case VT_SAFEARRAY:
         ret += L"SAFEARRAY(";
-        ret += stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo);
+        ret += stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo, parent);
         ret += L")";
         return ret;
     case VT_CARRAY:
-        ret += stringifyTypeDesc(&typeDesc->lpadesc->tdescElem, pTypeInfo);
+        ret += stringifyTypeDesc(&typeDesc->lpadesc->tdescElem, pTypeInfo, parent);
         for (INT dim = 0; dim < typeDesc->lpadesc->cDims; ++dim)
         {
             ret += L"[";
@@ -59,7 +64,7 @@ stringifyTypeDesc(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo)
         }
         return ret;
     case VT_USERDEFINED:
-        return stringifyCustomType(typeDesc->hreftype, pTypeInfo);
+        return stringifyCustomType(typeDesc->hreftype, pTypeInfo, parent);
     case VT_I2: return L"short";
     case VT_I4: return L"long";
     case VT_R4: return L"float";
@@ -163,25 +168,25 @@ void MTypeDesc::GenDepending2(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringS
     depending.insert(str);
 }
 
-String MTypeDesc::GetTypedName(MComPtr<ITypeInfo> ti, String name)
+String MTypeDesc::GetTypedName(MComPtr<ITypeInfo> ti, String name, String parent)
 {
-    return MTypeDesc::GetTypedName(this, ti, name);
+    return MTypeDesc::GetTypedName(this, ti, name, parent);
 }
 
 /*static*/ String
-MTypeDesc::GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String name)
+MTypeDesc::GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String name, String parent)
 {
     String ret;
     switch (typeDesc->vt)
     {
     case VT_PTR:
-        ret = stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo);
+        ret = stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo, parent);
         ret += L"* ";
         ret += name;
         return ret;
     case VT_SAFEARRAY:
         ret += L"SAFEARRAY(";
-        ret += stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo);
+        ret += stringifyTypeDesc(typeDesc->lptdesc, pTypeInfo, parent);
         ret += L") ";
         ret += name;
         return ret;
@@ -203,10 +208,10 @@ MTypeDesc::GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String
             }
             ret += L"]";
         }
-        ret = GetTypedName(&typeDesc->lpadesc->tdescElem, pTypeInfo, ret);
+        ret = GetTypedName(&typeDesc->lpadesc->tdescElem, pTypeInfo, ret, parent);
         return ret;
     case VT_USERDEFINED:
-        ret += stringifyCustomType(typeDesc->hreftype, pTypeInfo);
+        ret += stringifyCustomType(typeDesc->hreftype, pTypeInfo, parent);
         ret += L" ";
         ret += name;
         return ret;

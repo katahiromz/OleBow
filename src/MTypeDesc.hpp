@@ -15,8 +15,8 @@ struct MTypeDesc : TYPEDESC
 
     String ComTypeNameAsString(MComPtr<ITypeInfo> ti);
 
-    String GetTypedName(MComPtr<ITypeInfo> ti, String name);
-    static String GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String name);
+    String GetTypedName(MComPtr<ITypeInfo> ti, String name, String parent = L"");
+    static String GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String name, String parent = L"");
 
     void GenDepending(MComPtr<ITypeInfo> ti, StringSet& depending);
     void GenDepending2(MComPtr<ITypeInfo> ti, StringSet& depending2);

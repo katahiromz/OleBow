@@ -340,6 +340,10 @@ void MTypeLib::Dump(MSmartWriter& writer)
         {
             if (std::dynamic_pointer_cast<MTypeDef>(child))
                 continue;
+            if (std::dynamic_pointer_cast<MRecord>(child))
+                continue;
+            if (std::dynamic_pointer_cast<MUnion>(child))
+                continue;
             fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
         }
 

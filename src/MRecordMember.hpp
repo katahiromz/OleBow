@@ -11,7 +11,7 @@ public:
         m_vd = vd;
         m_ti = ti;
         m_typed_name = reinterpret_cast<MTypeDesc&>(
-            (*m_vd)->elemdescVar.tdesc).GetTypedName(m_ti, m_name);
+            (*m_vd)->elemdescVar.tdesc).GetTypedName(m_ti, m_name, parent->ShortName());
     }
     String Name() override
     {

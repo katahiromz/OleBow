@@ -186,35 +186,10 @@ void MTypeLib::Sort()
     // sort
     StringList names;
     StringSet name_set;
-    size_t retry_count = 0;
 retry:
     while (depending_map.size())
     {
         auto added = MakePtr<StringSet>();
-        if (retry_count++ > 100)
-        {
-            // TODO:
-#if 1
-            printf("---------\n");
-            for (auto& pair : depending_map)
-            {
-                for (auto& item : pair.second)
-                {
-                    printf("::: %ls: %ls\n", pair.first.c_str(), item.c_str());
-                }
-            }
-#endif
-            // :: IBindCtx: IRunningObjectTable
-            // :: IEnumMoniker: IMoniker
-            // :: IMoniker: IBindCtx
-            // :: IMoniker: IEnumMoniker
-            // :: IRunningObjectTable: IEnumMoniker
-            // :: IRunningObjectTable: IMoniker
-            // :: PartitionMoniker: IMoniker
-            // :: SoapMoniker: IMoniker
-            assert(0);
-            break;
-        }
         for (auto& pair : name_to_node)
         {
             if (depending_map.find(pair.first) == depending_map.end() ||
@@ -226,6 +201,7 @@ retry:
         }
         if (added->empty())
             goto hell;
+        bool flag = false;
         for (auto& item : *added)
         {
             if (name_set.count(item) == 0)
@@ -235,9 +211,34 @@ retry:
             }
             for (auto& pair : depending_map)
             {
+                auto size1 = pair.second.size();
                 pair.second.erase(item);
+                auto size2 = pair.second.size();
+                if (size1 != size2)
+                    flag = true;
             }
+            auto size1 = depending_map.size();
             depending_map.erase(item);
+            auto size2 = depending_map.size();
+            if (size1 != size2)
+                flag = true;
+        }
+        if (!flag)
+        {
+#if 1
+            if (depending_map.size())
+            {
+                printf("---------\n");
+                for (auto& pair : depending_map)
+                {
+                    for (auto& item : pair.second)
+                    {
+                        printf(":: %ls: %ls\n", pair.first.c_str(), item.c_str());
+                    }
+                }
+            }
+#endif
+            break;
         }
     }
 hell:

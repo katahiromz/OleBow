@@ -289,30 +289,7 @@ void MTypeLib::Dump(MSmartWriter& writer)
         auto children = Children();
         for (auto& child : *children)
         {
-            if (std::dynamic_pointer_cast<MCoClass>(child))
-            {
-                writer.write_line(child->Name() + L";");
-            }
-            else if (std::dynamic_pointer_cast<MInterface>(child))
-            {
-                fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
-            }
-            else if (std::dynamic_pointer_cast<MDispInterface>(child))
-            {
-                fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
-            }
-            else if (std::dynamic_pointer_cast<MRecord>(child))
-            {
-                fwdDeclarations.insert(std::make_pair(child->ShortName(), L"struct " + child->ShortName()));
-            }
-            else if (std::dynamic_pointer_cast<MUnion>(child))
-            {
-                fwdDeclarations.insert(std::make_pair(child->ShortName(), L"union " + child->ShortName()));
-            }
-            else if (std::dynamic_pointer_cast<MEnum>(child))
-            {
-                fwdDeclarations.insert(std::make_pair(child->ShortName(), L"enum " + child->ShortName()));
-            }
+            fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
         }
 
         for (auto& decl : fwdDeclarations)

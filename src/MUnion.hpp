@@ -17,7 +17,7 @@ public:
     }
     String Name() override
     {
-        return L"typedef union " + m_name;
+        return L"union " + m_name;
     }
     String ShortName() override
     {
@@ -43,7 +43,7 @@ public:
     }
     void Dump(MSmartWriter& writer) override
     {
-        writer.write_line(Name() + L" {");
+        writer.write_line(L"typedef " + Name() + L" {");
         writer.indent();
         auto children = Children();
         for (auto& child : *children)

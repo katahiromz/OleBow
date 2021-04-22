@@ -303,21 +303,25 @@ void MTypeLib::Dump(MSmartWriter& writer)
             {
                 writer.write_line(child->Name() + L";");
             }
-            if (std::dynamic_pointer_cast<MInterface>(child))
+            else if (std::dynamic_pointer_cast<MInterface>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
             }
-            if (std::dynamic_pointer_cast<MDispInterface>(child))
+            else if (std::dynamic_pointer_cast<MDispInterface>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
             }
-            if (std::dynamic_pointer_cast<MRecord>(child))
+            else if (std::dynamic_pointer_cast<MRecord>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), L"struct " + child->ShortName()));
             }
-            if (std::dynamic_pointer_cast<MUnion>(child))
+            else if (std::dynamic_pointer_cast<MUnion>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), L"union " + child->ShortName()));
+            }
+            else if (std::dynamic_pointer_cast<MEnum>(child))
+            {
+                fwdDeclarations.insert(std::make_pair(child->ShortName(), L"enum " + child->ShortName()));
             }
         }
 

@@ -283,20 +283,10 @@ void MTypeLib::Dump(MSmartWriter& writer)
         DumpMetadata(writer);
         writer.write_empty_line();
 
-        auto children = Children();
-
-        Set<String> ifaces;
-        for (auto& child : *children)
-        {
-            if (std::dynamic_pointer_cast<MInterface>(child))
-            {
-                ifaces.insert(child->ShortName());
-            }
-        }
-
         writer.write_line(L"// Forward declare all types defined in this typelib");
 
         auto fwdDeclarations = Dictionary<String, String>();
+        auto children = Children();
         for (auto& child : *children)
         {
             if (std::dynamic_pointer_cast<MCoClass>(child))

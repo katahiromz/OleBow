@@ -39,10 +39,6 @@ public:
         }
         writer.unindent();
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         auto ret = MakePtr<StringSet>();

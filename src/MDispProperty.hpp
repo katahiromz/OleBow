@@ -49,10 +49,6 @@ public:
         auto& ed = m_vd->elemDescVar();
         writer.write_line(ed.TypeDesc().GetTypedName(m_ti, m_name) + L";");
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         auto ret = MakePtr<StringSet>();

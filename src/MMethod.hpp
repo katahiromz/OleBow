@@ -36,10 +36,6 @@ public:
         Dump(writer, false);
     }
     void Dump(MSmartWriter& writer, bool bAsDispatch);
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         auto ret = MakePtr<StringSet>();

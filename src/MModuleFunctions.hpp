@@ -36,10 +36,6 @@ public:
             child->Dump(writer);
         }
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return true;
-    }
     Ptr<StringSet> GenDepending() override
     {
         auto ret = MakePtr<StringSet>();

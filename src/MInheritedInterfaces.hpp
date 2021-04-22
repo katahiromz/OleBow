@@ -44,10 +44,6 @@ public:
     {
         writer.write_empty_line();
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         return MakePtr<StringSet>();

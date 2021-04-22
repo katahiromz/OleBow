@@ -31,10 +31,5 @@ protected:
     }
     void GetAttrs(StringList& attrs) override;
     Ptr<MNodeList> GenChildren() override;
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        assert(0);
-        return true;
-    }
     void DumpMetadata(MSmartWriter& writer);
 };

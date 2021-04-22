@@ -59,10 +59,6 @@ public:
             writer.write_line(strAttrs + L"interface " + ShortName() + L";");
         }
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         return MakePtr<StringSet>();

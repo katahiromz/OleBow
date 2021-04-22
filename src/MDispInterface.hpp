@@ -50,10 +50,6 @@ public:
         return ret;
     }
     void Dump(MSmartWriter& writer) override;
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return ifaces.count(ShortName()) == 0;
-    }
     Ptr<StringSet> GenDepending() override
     {
         auto ret = MakePtr<StringSet>();

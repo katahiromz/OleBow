@@ -58,10 +58,6 @@ public:
             writer.write_line(L" " + m_typed_name + L";");
         }
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return true;
-    }
     Ptr<StringSet> GenDepending() override
     {
         auto ret = MakePtr<StringSet>();

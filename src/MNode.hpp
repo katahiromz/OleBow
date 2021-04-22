@@ -28,7 +28,6 @@ public:
     virtual void GetAttrs(StringList& attrs) = 0;
     virtual Ptr<MNodeList> GenChildren() = 0;
     virtual void Dump(MSmartWriter& writer) = 0;
-    virtual bool DisplayAtTLBLevel(const Set<String>& ifaces) = 0;
     virtual Ptr<StringSet> GenDepending() = 0;
     virtual INT SortOfType() const { return -1; }
 

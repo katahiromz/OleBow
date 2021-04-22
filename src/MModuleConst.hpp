@@ -35,10 +35,6 @@ public:
     {
         writer.write_line(L"const " + m_typed_name + L" = " + m_val + L";");
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         return MakePtr<StringSet>();

@@ -41,10 +41,6 @@ public:
     {
         writer.write_line(Name() + (embedded ? (islast ? L"" : L",") : L";"));
     }
-    bool DisplayAtTLBLevel(const Set<String>& ifaces) override
-    {
-        return false;
-    }
     Ptr<StringSet> GenDepending() override
     {
         return MakePtr<StringSet>();

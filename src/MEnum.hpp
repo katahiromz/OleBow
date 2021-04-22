@@ -14,7 +14,7 @@ public:
     }
     String Name() override
     {
-        return L"enum " + m_name;
+        return L"enum tag" + m_name;
     }
     String ShortName() override
     {
@@ -49,7 +49,7 @@ public:
         GetAttrs(attrs);
         writer.write_attrs(attrs);
 
-        writer.write_line(L"typedef enum " + ShortName() + L" {");
+        writer.write_line(L"typedef " + Name() + L" {");
         writer.indent();
         {
             auto children = Children();

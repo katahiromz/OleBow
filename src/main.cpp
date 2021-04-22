@@ -3,7 +3,7 @@
 
 static void show_version(void)
 {
-    std::puts("OleBow ver.0.7.5 by katahiromz");
+    std::puts("OleBow ver.0.7.6 by katahiromz");
     std::puts("See: https://github.com/katahiromz/OleBow");
 }
 

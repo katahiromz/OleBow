@@ -173,6 +173,28 @@ void MTypeLib::Sort()
         }
     }
 
+depending_retry:
+    for (auto& pair1 : depending_map)
+    {
+        bool flag = false;
+        for (auto& pair2 : depending_map)
+        {
+            if (pair1.first != pair2.first)
+            {
+                if (pair2.second.count(pair1.first) > 0)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+        {
+            depending_map.erase(pair1.first);
+            goto depending_retry;
+        }
+    }
+
 #if 0
     for (auto& pair : depending_map)
     {
@@ -236,6 +258,12 @@ retry:
                         printf(":: %ls: %ls\n", pair.first.c_str(), item.c_str());
                     }
                 }
+                for (auto& pair : depending_map)
+                {
+                    names.push_back(pair.first);
+                    name_set.insert(pair.first);
+                }
+                depending_map.clear();
             }
 #endif
             break;

@@ -84,6 +84,16 @@ public:
         }
         return ret;
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto children = Children();
+        for (auto& child : *children)
+        {
+            ret->insert(child->ShortName());
+        }
+        return ret;
+    }
 protected:
     String m_name;
     Ptr<MTypeAttr> m_ta;

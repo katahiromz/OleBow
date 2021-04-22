@@ -18,6 +18,11 @@ public:
         assert(0);
         return NULL;
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        assert(0);
+        return NULL;
+    }
 protected:
     TLIBATTR *m_pAttr;
     String m_name;

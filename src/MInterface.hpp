@@ -95,6 +95,18 @@ public:
         ret->insert(m_base);
         return ret;
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto children = Children();
+        for (auto& child : *children)
+        {
+            auto ret2 = child->Depending2();
+            ret->insert(ret2->begin(), ret2->end());
+        }
+        ret->insert(m_base);
+        return ret;
+    }
 protected:
     String m_name;
     String m_base;

@@ -1,5 +1,6 @@
 #include "MTypeLib.hpp"
 #include "MTypeLibMetadata.hpp"
+#include "MTypeDef.hpp"
 #include "MCustData.hpp"
 #include "MTypeLibAttr.hpp"
 #include "MInterface.hpp"
@@ -179,7 +180,7 @@ void MTypeLib::Sort()
     StringList names;
     StringSet name_set;
 
-erase_retry:
+stage1:
 #if 0
     for (auto& pair : depending_map)
     {
@@ -208,33 +209,81 @@ erase_retry:
                 }
                 depending_map.erase(item);
                 flag = true;
-                goto erase_retry;
+                goto stage1;
             }
         }
     }
 
+    Dictionary<String, StringSet> depending_map2;
+    auto children2 = MakePtr<MNodeList>();
+
+    StringSet name_set2;
+
     for (auto& pair : depending_map)
     {
-        auto& item = pair.first;
-        if (name_set.count(item) == 0)
+        //fprintf(stderr, "<> %ls\n", pair.first.c_str());
+        children2->push_back(name_to_node[pair.first]);
+    }
+
+    for (auto& child : *children2)
+    {
+        auto name = child->ShortName();
+        if (depending_map.find(name) != depending_map.end())
         {
-            names.push_back(item);
-            name_set.insert(item);
+            Ptr<StringSet> d = child->Depending2();
+            depending_map2[name];
+            for (auto& item : *d)
+            {
+                if (name_to_node.count(item) > 0 &&
+                    name != item &&
+                    name_set.count(item) == 0)
+                {
+                    depending_map2[name].insert(item);
+                }
+            }
+        }
+    }
+
+stage2:
+    flag = false;
+    for (auto& pair : depending_map2)
+    {
+        auto& item = pair.first;
+        if (pair.second.empty())
+        {
+            if (name_set2.count(item) == 0)
+            {
+                names.push_back(item);
+                name_set.insert(item);
+                name_set2.insert(item);
+                for (auto& pair2 : depending_map2)
+                {
+                    pair2.second.erase(item);
+                }
+                depending_map2.erase(item);
+                flag = true;
+                goto stage2;
+            }
         }
     }
 
 #if 0
-    for (auto& item : names)
+    for (auto& pair : depending_map2)
     {
-        printf("=== %ls", item.c_str());
-        printf("\n");
+        fprintf(stderr, "=== %ls (%d)", pair.first.c_str(), (int)name_set.count(pair.first));
+        for (auto& item : pair.second)
+        {
+            fprintf(stderr, ", %ls", item.c_str());
+        }
+        fprintf(stderr, "\n");
     }
 #endif
 
-    assert(names.size() == m_children->size());
 #if 0
-    fprintf(stderr, "%d, %d\n", (int)names.size(), (int)m_children->size());
+    if (names.size() != m_children->size());
+        fprintf(stderr, "%d, %d\n", (int)names.size(), (int)m_children->size());
 #endif
+    assert(names.size() == m_children->size());
     auto ret = MakePtr<MNodeList>();
     for (auto& name : names)
     {
@@ -289,6 +338,8 @@ void MTypeLib::Dump(MSmartWriter& writer)
         auto children = Children();
         for (auto& child : *children)
         {
+            if (std::dynamic_pointer_cast<MTypeDef>(child))
+                continue;
             fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
         }
 

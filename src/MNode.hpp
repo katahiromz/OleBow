@@ -14,6 +14,7 @@ public:
     MNode* m_parent;
     Ptr<MNodeList> m_children;
     Ptr<StringSet> m_depending;
+    Ptr<StringSet> m_depending2;
 
     MNode() : m_index(0), m_parent(NULL)
     {
@@ -29,10 +30,12 @@ public:
     virtual Ptr<MNodeList> GenChildren() = 0;
     virtual void Dump(MSmartWriter& writer) = 0;
     virtual Ptr<StringSet> GenDepending() = 0;
+    virtual Ptr<StringSet> GenDepending2() = 0;
     virtual INT SortOfType() const { return -1; }
 
     Ptr<MNodeList> Children();
     Ptr<StringSet> Depending();
+    Ptr<StringSet> Depending2();
 
     void CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
                              bool topLevel, bool swapfordispatch,

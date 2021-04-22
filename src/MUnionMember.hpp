@@ -42,6 +42,12 @@ public:
         reinterpret_cast<MTypeDesc&>((*m_vd)->elemdescVar.tdesc).GenDepending(m_ti, *ret);
         return ret;
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        auto ret = MakePtr<StringSet>();
+        reinterpret_cast<MTypeDesc&>((*m_vd)->elemdescVar.tdesc).GenDepending2(m_ti, *ret);
+        return ret;
+    }
 protected:
     String m_name;
     String m_typed_name;

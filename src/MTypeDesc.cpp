@@ -100,6 +100,11 @@ void MTypeDesc::GenDepending(MComPtr<ITypeInfo> ti, StringSet& depending)
     GenDepending(this, ti, depending);
 }
 
+void MTypeDesc::GenDepending2(MComPtr<ITypeInfo> ti, StringSet& depending)
+{
+    GenDepending2(this, ti, depending);
+}
+
 void MTypeDesc::GenDepending(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSet& depending)
 {
     String ret;
@@ -114,6 +119,27 @@ void MTypeDesc::GenDepending(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSe
         break;
     case VT_USERDEFINED:
         GenDepending(ti, typeDesc->hreftype, depending);
+    default:
+        break;
+    }
+}
+
+void MTypeDesc::GenDepending2(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSet& depending2)
+{
+    String ret;
+    switch (typeDesc->vt)
+    {
+    case VT_PTR:
+        // ignore
+        break;
+    case VT_SAFEARRAY:
+        GenDepending2(typeDesc->lptdesc, ti, depending2);
+        break;
+    case VT_CARRAY:
+        GenDepending2(&typeDesc->lpadesc->tdescElem, ti, depending2);
+        break;
+    case VT_USERDEFINED:
+        GenDepending(ti, typeDesc->hreftype, depending2);
     default:
         break;
     }

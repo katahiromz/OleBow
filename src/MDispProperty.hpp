@@ -56,6 +56,13 @@ public:
         ed.TypeDesc().GenDepending(m_ti, *ret);
         return ret;
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto& ed = m_vd->elemDescVar();
+        ed.TypeDesc().GenDepending2(m_ti, *ret);
+        return ret;
+    }
 protected:
     String m_name;
     Ptr<MVarDesc> m_vd;

@@ -45,6 +45,10 @@ public:
     {
         return MakePtr<StringSet>();
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        return MakePtr<StringSet>();
+    }
 protected:
     String m_name;
     Ptr<MVarDesc> m_vd;

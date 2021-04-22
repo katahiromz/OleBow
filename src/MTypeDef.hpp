@@ -3,6 +3,7 @@
 #include "MNode.hpp"
 #include "MTypeAttr.hpp"
 #include "MTypeInfoExtra.hpp"
+#include "MTypeDesc.hpp"
 
 class MTypeDef : public MNode
 {
@@ -62,6 +63,12 @@ public:
     {
         auto ret = MakePtr<StringSet>();
         reinterpret_cast<MTypeDesc&>((*m_ta)->tdescAlias).GenDepending(m_ti, *ret);
+        return ret;
+    }
+    Ptr<StringSet> GenDepending2() override
+    {
+        auto ret = MakePtr<StringSet>();
+        reinterpret_cast<MTypeDesc&>((*m_ta)->tdescAlias).GenDepending2(m_ti, *ret);
         return ret;
     }
 protected:

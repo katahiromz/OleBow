@@ -30,6 +30,15 @@ Ptr<StringSet> MNode::Depending()
     return m_depending;
 }
 
+Ptr<StringSet> MNode::Depending2()
+{
+    if (!m_depending2)
+    {
+        m_depending2 = GenDepending2();
+    }
+    return m_depending2;
+}
+
 void
 MNode::CommonBuildTlibNode(MComPtr<ITypeInfo> ti,
                            bool topLevel, bool swapfordispatch,

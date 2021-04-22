@@ -55,6 +55,25 @@ public:
             reinterpret_cast<MTypeDesc&>(elast->tdesc).GenDepending(m_ti, *ret);
         return ret;
     }
+    Ptr<StringSet> GenDepending2() override
+    {
+        auto ret = MakePtr<StringSet>();
+        auto edps = m_fd->elemdescParams();
+        ELEMDESC* elast = NULL;
+        if ((*m_fd)->cParams > 0)
+        {
+            if (edps->size() > 0)
+                elast = (*edps)[edps->size() - 1];
+        }
+        for (UINT y = 0; y < (UINT)(*m_fd)->cParams; ++y)
+        {
+            auto edp = (*edps)[y];
+            reinterpret_cast<MTypeDesc&>(edp->tdesc).GenDepending2(m_ti, *ret);
+        }
+        if (elast)
+            reinterpret_cast<MTypeDesc&>(elast->tdesc).GenDepending2(m_ti, *ret);
+        return ret;
+    }
 protected:
     String m_name;
     Ptr<MFuncDesc> m_fd;

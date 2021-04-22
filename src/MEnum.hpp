@@ -64,8 +64,11 @@ public:
     }
     Ptr<StringSet> GenDepending() override
     {
-        auto ret = MakePtr<StringSet>();
-        return ret;
+        return MakePtr<StringSet>();
+    }
+    Ptr<StringSet> GenDepending2() override
+    {
+        return MakePtr<StringSet>();
     }
 protected:
     String m_name;

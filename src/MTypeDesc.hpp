@@ -19,7 +19,10 @@ struct MTypeDesc : TYPEDESC
     static String GetTypedName(TYPEDESC* typeDesc, MComPtr<ITypeInfo> pTypeInfo, String name);
 
     void GenDepending(MComPtr<ITypeInfo> ti, StringSet& depending);
+    void GenDepending2(MComPtr<ITypeInfo> ti, StringSet& depending2);
 
     static void GenDepending(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSet& depending);
+    static void GenDepending2(TYPEDESC* typeDesc, MComPtr<ITypeInfo> ti, StringSet& depending2);
     static void GenDepending(MComPtr<ITypeInfo> pti, HREFTYPE refType, StringSet& depending);
+    static void GenDepending2(MComPtr<ITypeInfo> pti, HREFTYPE refType, StringSet& depending2);
 };

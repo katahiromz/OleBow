@@ -313,11 +313,11 @@ void MTypeLib::Dump(MSmartWriter& writer)
             }
             if (std::dynamic_pointer_cast<MRecord>(child))
             {
-                fwdDeclarations.insert(std::make_pair(L"struct " + child->ShortName(), child->Name()));
+                fwdDeclarations.insert(std::make_pair(child->ShortName(), L"struct " + child->ShortName()));
             }
             if (std::dynamic_pointer_cast<MUnion>(child))
             {
-                fwdDeclarations.insert(std::make_pair(L"union " + child->ShortName(), child->Name()));
+                fwdDeclarations.insert(std::make_pair(child->ShortName(), L"union " + child->ShortName()));
             }
         }
 
@@ -328,12 +328,9 @@ void MTypeLib::Dump(MSmartWriter& writer)
 
         for (auto& child : *children)
         {
-            if (child->DisplayAtTLBLevel(ifaces))
-            {
-                if (!writer.block_first_line())
-                    writer.write_empty_line();
-                child->Dump(writer);
-            }
+            if (!writer.block_first_line())
+                writer.write_empty_line();
+            child->Dump(writer);
         }
     }
     writer.unindent();

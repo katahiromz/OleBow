@@ -64,7 +64,7 @@ public:
     }
     bool DisplayAtTLBLevel(const Set<String>& ifaces) override
     {
-        return false;
+        return true;
     }
     Ptr<StringSet> GenDepending() override
     {

@@ -156,16 +156,18 @@ void MTypeLib::Sort()
     for (auto& child : *children)
     {
         name_to_node[child->ShortName()] = child;
+        //fprintf(stderr, "%ls: %ls\n", child->Class().c_str(), child->ShortName().c_str());
     }
 
     // create a depending mapping (the node name to the depending nodes)
     Dictionary<String, StringSet> depending_map;
     for (auto& child : *children)
     {
+        auto name = child->ShortName();
         Ptr<StringSet> d = child->Depending();
+        depending_map[name];
         for (auto& item : *d)
         {
-            auto name = child->ShortName();
             if (name_to_node.count(item) > 0 && name != item)
             {
                 depending_map[name].insert(item);
@@ -278,6 +280,18 @@ retry:
     }
 hell:
     assert(names.size() == m_children->size());
+    if (names.size() != m_children->size())
+    {
+        fprintf(stderr, "%d, %d\n", (int)names.size(), (int)m_children->size());
+        for (auto& name : names)
+        {
+            fprintf(stderr, "name: %ls\n", name.c_str());
+        }
+        for (auto& node : *m_children)
+        {
+            fprintf(stderr, "ShortName: %ls\n", node->ShortName().c_str());
+        }
+    }
     auto ret = MakePtr<MNodeList>();
     for (auto& name : names)
     {
@@ -338,28 +352,24 @@ void MTypeLib::Dump(MSmartWriter& writer)
         }
 
         writer.write_line(L"// Forward declare all types defined in this typelib");
+
+        auto fwdDeclarations = Dictionary<String, String>();
         for (auto& child : *children)
         {
             if (std::dynamic_pointer_cast<MCoClass>(child))
             {
                 writer.write_line(child->Name() + L";");
             }
-        }
-        auto fwdDeclarations = Dictionary<String, String>();
-        for (auto& child : *children)
-        {
             if (std::dynamic_pointer_cast<MInterface>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
             }
-        }
-        for (auto& child : *children)
-        {
             if (std::dynamic_pointer_cast<MDispInterface>(child))
             {
                 fwdDeclarations.insert(std::make_pair(child->ShortName(), child->Name()));
             }
         }
+
         for (auto& decl : fwdDeclarations)
         {
             writer.write_line(decl.second + L";");
@@ -367,29 +377,6 @@ void MTypeLib::Dump(MSmartWriter& writer)
 
         for (auto& child : *children)
         {
-            if (std::dynamic_pointer_cast<MEnum>(child))
-            {
-                if (!writer.block_first_line())
-                    writer.write_empty_line();
-                child->Dump(writer);
-            }
-        }
-        for (auto& child : *children)
-        {
-            if (std::dynamic_pointer_cast<MRecord>(child))
-            {
-                if (!writer.block_first_line())
-                    writer.write_empty_line();
-                child->Dump(writer);
-            }
-        }
-
-        for (auto& child : *children)
-        {
-            if (std::dynamic_pointer_cast<MEnum>(child))
-                continue;
-            if (std::dynamic_pointer_cast<MRecord>(child))
-                continue;
             if (child->DisplayAtTLBLevel(ifaces))
             {
                 if (!writer.block_first_line())

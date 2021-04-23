@@ -49,7 +49,7 @@ public:
         GetAttrs(attrs);
         writer.write_attrs(attrs);
 
-        writer.write_line(L"typedef " + Name() + L" {");
+        writer.write_line(L"typedef [public] " + Name() + L" {");
         writer.indent();
         {
             auto children = Children();

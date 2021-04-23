@@ -43,7 +43,7 @@ public:
     }
     void Dump(MSmartWriter& writer) override
     {
-        writer.write_line(L"typedef " + Name() + L" {");
+        writer.write_line(L"typedef [public] " + Name() + L" {");
         writer.indent();
         auto children = Children();
         for (auto& child : *children)

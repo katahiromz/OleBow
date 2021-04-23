@@ -45,19 +45,7 @@ public:
     }
     void Dump(MSmartWriter& writer) override
     {
-        StringList attrs;
-        GetAttrs(attrs);
-
-        if (attrs.empty())
-        {
-            writer.write_line(L"typedef " + m_typed_name + L";");
-        }
-        else
-        {
-            writer.write_line(L"typedef ");
-            writer.write_attrs(attrs);
-            writer.write_line(L" " + m_typed_name + L";");
-        }
+        writer.write_line(L"typedef [public] " + m_typed_name + L";");
     }
     Ptr<StringSet> GenDepending() override
     {
